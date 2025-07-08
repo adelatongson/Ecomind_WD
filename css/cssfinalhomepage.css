@@ -1,0 +1,503 @@
+ /*
+        ------------------------------------------
+        GLOBAL & RESET STYLES
+        ------------------------------------------
+        */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f8f8;
+            display: flex;
+            flex-direction: column; /* Stack header, main, and footer vertically */
+            min-height: 100vh;      /* Ensure body takes full viewport height */
+            overflow-x: hidden;     /* Prevent horizontal scroll */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /*
+        ------------------------------------------
+        NAVIGATION BAR (HEADER) STYLES
+        ------------------------------------------
+        */
+        .header {
+            background-color: #fff;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0; /* Prevents header from shrinking */
+            position: fixed; /* Fixed position at the top */
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 50; /* Ensure header is above other content */
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            padding-left: 5px; /* Added padding to give some space on the left edge */
+            gap: 10px; /* Space between logo and ECOMIND text */
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            gap: 10px; /* Space between logo icon and ECOMIND text */
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Hamburger icon styles - now always visible for desktop layout */
+        .hamburger-icon {
+            background: none;
+            border: none;
+            font-size: 28px; /* Made slightly larger for visibility */
+            cursor: pointer;
+            color: #333;
+            padding: 5px;
+            display: block; /* Always displayed for desktop-only design */
+            flex-shrink: 0;
+            line-height: 1; /* Ensures text is vertically centered without extra spacing */
+            align-self: center; /* Vertically align in flex container */
+        }
+
+        .top-nav-links {
+            display: flex; /* Always displayed for desktop-only design */
+            gap: 25px;
+            align-items: center;
+        }
+
+        .top-nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 8px 12px;
+            transition: color 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .top-nav-links a:hover {
+            color: #4CAF50;
+            background-color: #e6f7e6;
+        }
+
+        .top-nav-links .login-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .top-nav-links .login-btn:hover {
+            background-color: #45a049;
+            color: #fff;
+        }
+#login-status-container {
+            position: relative; /* Needed for absolute positioning of dropdown */
+            display: flex; /* To align avatar if needed */
+            align-items: center;
+        }
+
+        .user-avatar {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .user-avatar img {
+            width: 40px; /* Adjust as needed */
+            height: 40px; /* Adjust as needed */
+            border-radius: 50%; /* Makes it round */
+            object-fit: cover;
+            margin-left: 10px; /* Spacing from other nav items */
+            border: 2px solid #ccc; /* Optional: adds a border around the avatar */
+        }
+.hidden {
+    display: none !important; /* Use !important to ensure it overrides other styles if needed */
+}
+        /* Styles for the dropdown content */
+        .profile-dropdown-content {
+            display: none; /* Hidden by default */
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 100; /* Ensure it's above other content */
+            right: 0; /* Align to the right of the avatar */
+            top: calc(100% + 5px); /* Position below the avatar with a small gap */
+            border-radius: 5px;
+            overflow: hidden; /* For rounded corners */
+        }
+
+        .profile-dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        .profile-dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        /* Show the dropdown when the 'show' class is added */
+        .profile-dropdown-content.show {
+            display: block;
+        }
+
+        /* Style the login button if it's placed directly in the header */
+        .header .login-button {
+            background-color: #4CAF50; /* Example green */
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none; /* If it's a link styled as button */
+            display: inline-block; /* Ensure padding works */
+        }
+
+        .header .login-button:hover {
+            background-color: #45a049;
+        }
+
+        /*
+        ------------------------------------------
+        SIDEBAR STYLES
+        ------------------------------------------
+        */
+        .sidebar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-container.open {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .sidebar-menu {
+            width: 280px;
+            height: 100%;
+            background-color: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-menu.open {
+            transform: translateX(0);
+        }
+
+        .close-sidebar-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #555;
+            align-self: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-links a {
+            display: block;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar-links a:hover {
+            background-color: #e6f7e6;
+            color: #4CAF50;
+        }
+
+        .sidebar-links a.active {
+            background-color: #d4edda;
+            color: #4CAF50;
+            font-weight: 700;
+        }
+
+        /*
+        ------------------------------------------
+        HERO SECTION STYLES
+        ------------------------------------------
+        */
+        .hero {
+            display: flex;
+            align-items: center;
+            background-color: #E0C7A9;
+            padding: 40px;
+            margin-top: 70px; /* Adjust based on header height */
+            flex-direction: row; /* Always row for desktop-only */
+            text-align: left; /* Always left for desktop-only */
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: center;
+            margin-bottom: 0; /* No margin-bottom for desktop */
+            margin-right: 20px; /* Space between image and content on desktop */
+        }
+
+        .hero-image img {
+            max-width: 70%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        .hero-content {
+            flex: 2;
+            padding-left: 20px; /* Always padding-left for desktop-only */
+            text-align: justify;
+        }
+
+        .hero-content h1 {
+            color: #000000;
+            margin: 0 0 10px 0;
+            font-size: 2.5em;
+        }
+
+        .hero-content p {
+            color: #5a5a5a;
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+
+        /*
+        ------------------------------------------
+        ASSESSMENT CONTAINER STYLES
+        ------------------------------------------
+        */
+        .assessment-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .instruction-box {
+            background-color: #e8f5e9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #c8e6c9;
+        }
+
+        .instruction-box h2 {
+            color: #2d3e3f;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        .instruction-box p {
+            color: #5a5a5a;
+        }
+
+        .items-time-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-direction: row; /* Always row for desktop-only */
+            gap: 20px; /* Space between boxes on desktop */
+        }
+
+        .items-box, .time-box {
+            background-color: #c8e6c9;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-align: center;
+            flex: 1;
+            border: 1px solid #a5d6a7;
+        }
+
+        .items-box p, .time-box p {
+            margin: 0;
+            color: #2d3e3f;
+            font-weight: 500;
+        }
+
+        .start-button-container {
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .start-button {
+            background-color: #81c784;
+            color: rgb(0, 0, 0);
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .start-button:hover {
+            background-color: #66bb6a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /*
+        ------------------------------------------
+        FOOTER STYLES
+        ------------------------------------------
+        */
+        .footer {
+    background-color: #4F6D44;
+    color: #fff;
+    padding: 60px 0 30px;
+    position: relative;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding-top: 0;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+    color: #fff;
+    text-align: center; /* Centered text within each column */
+}
+
+.footer-column h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 10px;
+}
+
+.footer-column ul li a, .footer-column ul li {
+    text-decoration: none;
+    color: #eee;
+    transition: color 0.3s ease;
+}
+
+.footer-column ul li a:hover {
+    color: #c9e4c9;
+}
+
+.footer-social-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    align-items: center; /* Centered social icons */
+}
+
+.footer-social-icons a {
+    color: #eee;
+    font-size: 16px;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-social-icons a:hover {
+    color: #fff;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    color: #aaa;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 20px;
+}
+.footer-bottom a {
+    text-decoration: none;
+    color: #aaa;
+    transition: color 0.3s ease;
+}
+.footer-bottom a:hover {
+    color: #fff;
+}
