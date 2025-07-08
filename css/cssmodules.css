@@ -1,0 +1,708 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden; /* Prevent horizontal scroll due to sidebar */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header (Top Navigation) */
+.header {
+    background-color: #fff;
+    padding: 15px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0; /* Prevents header from shrinking */
+    position: fixed; /* Fixed position at the top */
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 50; /* Ensure header is above other content */
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    padding-left: 5px; /* Added padding to give some space on the left edge */
+    gap: 10px; /* Space between logo and ECOMIND text */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    gap: 10px; /* Space between logo icon and ECOMIND text */
+}
+
+.logo-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.logo-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Hamburger icon styles - now always visible for desktop layout */
+.hamburger-icon {
+    background: none;
+    border: none;
+    font-size: 28px; /* Made slightly larger for visibility */
+    cursor: pointer;
+    color: #333;
+    padding: 5px;
+    display: block; /* Always displayed for desktop-only design */
+    flex-shrink: 0;
+    line-height: 1; /* Ensures text is vertically centered without extra spacing */
+    align-self: center; /* Vertically align in flex container */
+}
+
+.top-nav-links {
+    display: flex; /* Always displayed for desktop-only design */
+    gap: 25px;
+    align-items: center;
+}
+
+.top-nav-links a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 600;
+    padding: 8px 12px;
+    transition: color 0.3s ease;
+    border-radius: 8px;
+}
+
+.top-nav-links a:hover {
+    color: #4CAF50;
+    background-color: #e6f7e6;
+}
+
+.top-nav-links .login-btn {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.top-nav-links .login-btn:hover {
+    background-color: #45a049;
+    color: #fff;
+}
+
+#login-status-container {
+    position: relative; /* Needed for absolute positioning of dropdown */
+    display: flex; /* To align avatar if needed */
+    align-items: center;
+}
+
+/* Avatar styles */
+.user-avatar {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border: 2px solid #4CAF50; /* Example border */
+}
+
+.profile-dropdown-content {
+    display: none; /* Hidden by default */
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0;
+    top: 50px; /* Adjust as needed */
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.profile-dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    white-space: nowrap;
+}
+
+.profile-dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.profile-dropdown-content.show {
+    display: block; /* Show when 'show' class is added */
+}
+
+.hidden {
+    display: none !important;
+}
+
+.login-button {
+    display: block; /* Ensure login button is block when visible */
+}
+
+/* Login info dropdown styles (used in sidebar for logged-in user) */
+.login-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff; /* Assuming sidebar links are white */
+    cursor: pointer;
+    position: relative;
+    padding: 12px 15px; /* Match sidebar link padding */
+}
+.login-info img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #5cb85c;
+    padding: 2px;
+    border: 1px solid #fff;
+}
+/* Ensure dropdown for sidebar user info is always visible as part of the menu */
+.sidebar-links #sidebarUserAvatarListItem .profile-dropdown-content {
+    position: static; /* Remove absolute positioning within sidebar */
+    background-color: transparent; /* No background needed, let sidebar manage */
+    box-shadow: none; /* No shadow */
+    min-width: auto;
+    padding: 0;
+    margin-top: 5px; /* Small space below avatar */
+    display: block; /* Always visible within sidebar when user is logged in */
+}
+.sidebar-links #sidebarUserAvatarListItem .profile-dropdown-content a {
+    padding-left: 30px; /* Indent for sub-links */
+    color: #555; /* Match regular sidebar link color */
+}
+.sidebar-links #sidebarUserAvatarListItem .profile-dropdown-content a:hover {
+    background-color: #e6f7e6; /* Match regular sidebar link hover */
+    color: #4CAF50;
+}
+
+
+/* Sliding Sidebar Container (Overlay) */
+.sidebar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    visibility: hidden; /* Hidden by default */
+    opacity: 0; /* Fade out effect */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1000; /* Ensure it's above everything */
+}
+.sidebar-container.open {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Actual Sliding Sidebar Menu */
+.sidebar-menu {
+    width: 280px; /* Width of the sidebar */
+    height: 100%;
+    background-color: #fff; /* White background for the menu */
+    position: absolute;
+    top: 0;
+    left: 0; /* Starts from the left edge of the container */
+    transform: translateX(-100%); /* Hidden off-screen by default */
+    transition: transform 0.3s ease; /* Slide in/out animation */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* Shadow on the right edge */
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+.sidebar-menu.open {
+    transform: translateX(0); /* Slide into view */
+}
+
+.close-sidebar-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #555;
+    align-self: flex-end; /* Pushes to the right within the column flexbox */
+    margin-bottom: 20px;
+}
+
+.sidebar-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-links li {
+    margin-bottom: 10px;
+}
+
+.sidebar-links a {
+    display: block;
+    text-decoration: none;
+    color: #555;
+    font-weight: 600;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar-links a:hover {
+    background-color: #e6f7e6;
+    color: #4CAF50;
+}
+
+.sidebar-links a.active {
+    background-color: #d4edda;
+    color: #4CAF50;
+    font-weight: 700;
+}
+
+/* Main Content Area */
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 80px; /* Added padding-top to account for fixed header */
+    --base-font-size: 16px;
+    font-size: var(--base-font-size);
+}
+
+/* Module Title Section Styles */
+.header-title-section {
+    width: 100%;
+    text-align: center;
+    background-color: #E5CBAF;
+    padding: 5vh 2vw;
+}
+.header-title-section .title-box {
+    max-width: 900px;
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+    padding: 32px;
+    margin-bottom: 32px;
+    text-align: center;
+}
+.header-title-section h1 {
+    font-size: calc(2.5em + 1vw);
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 0.2em;
+}
+.header-title-section h2 {
+    font-size: calc(1.5em + 0.5vw);
+    font-weight: 500;
+    color: #374151;
+}
+
+/* Font Size Controls */
+.font-size-controls {
+    width: 100%;
+    max-width: 900px;
+    padding-left: 16px;
+    padding-right: 16px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+.font-size-controls span {
+    color: #374151;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+.font-size-button {
+    background-color: #d1d5db;
+    color: #1f2937;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.font-size-button:hover {
+    background-color: #9ca3af;
+}
+
+/* Main interactive sections grid */
+.interactive-sections-grid {
+    width: 100%;
+    max-width: 900px;
+    padding-left: 16px;
+    padding-right: 16px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-top: 32px;
+    padding-bottom: 32px;
+}
+
+/* Individual Content Section Styles */
+.content-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+    padding: 24px;
+}
+@media (min-width: 768px) {
+    .content-section {
+        flex-direction: row;
+    }
+}
+.section-button {
+    flex-shrink: 0;
+    background-color: #f59e0b;
+    color: white;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease-in-out;
+    margin-bottom: 16px;
+    border: none;
+    cursor: pointer;
+}
+.section-button:hover {
+    background-color: #d97706;
+    transform: scale(1.05);
+}
+.section-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+.section-button:disabled:hover {
+    background-color: #cccccc;
+}
+@media (min-width: 768px) {
+    .section-button {
+        margin-bottom: 0;
+        margin-right: 24px;
+    }
+}
+.content-display {
+    flex-grow: 1;
+    width: 100%;
+    background-color: #d1fae5;
+    border-radius: 8px;
+    padding: 16px;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4b5563;
+    text-align: center;
+    font-size: 1em;
+}
+
+/* Styles for content loaded dynamically */
+.inner-content-wrapper {
+    padding: 16px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+    color: #1f2937;
+    width: 100%;
+    text-align: left;
+    font-size: 1em;
+}
+.explanation-content-inner-wrapper {
+    text-align: justify;
+}
+.inner-content-wrapper h3 {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 16px;
+}
+.inner-content-wrapper p {
+    font-size: 0.9em;
+}
+.image-gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+.image-gallery img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    max-width: 35em;
+    display: block;
+}
+.image-caption {
+    font-size: 0.8em;
+    color: #6b7280;
+}
+.close-button {
+    margin-top: 24px;
+    background-color: #ef4444;
+    color: white;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease-in-out;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+.close-button:hover {
+    background-color: #dc2626;
+}
+.content-link {
+    color: #2563eb;
+    text-decoration: none;
+    margin-top: 16px;
+    display: inline-block;
+    transition: text-decoration 0.3s ease;
+    font-size: 0.9em;
+}
+.content-link:hover {
+    text-decoration: underline;
+}
+
+/* Video specific styles */
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+}
+.video-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+}
+.video-description-paragraph {
+    margin-top: 1rem;
+    font-size: 0.9em;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #4F6D44;
+    color: #fff;
+    padding: 60px 0 30px;
+    position: relative;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding-top: 0;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+    color: #fff;
+    text-align: center; /* Centered text within each column */
+}
+
+.footer-column h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 10px;
+}
+
+.footer-column ul li a, .footer-column ul li {
+    text-decoration: none;
+    color: #eee;
+    transition: color 0.3s ease;
+}
+
+.footer-column ul li a:hover {
+    color: #c9e4c9;
+}
+
+.footer-social-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    align-items: center; /* Centered social icons */
+}
+
+.footer-social-icons a {
+    color: #eee;
+    font-size: 16px;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-social-icons a:hover {
+    color: #fff;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    color: #aaa;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 20px;
+}
+.footer-bottom a {
+    text-decoration: none;
+    color: #aaa;
+    transition: color 0.3s ease;
+}
+.footer-bottom a:hover {
+    color: #fff;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    /* No specific changes to the module styles needed here based on previous conversation */
+}
+
+@media (max-width: 768px) {
+    /* Header - remains mostly the same, hamburger is main toggle */
+    .top-nav-links {
+        display: none; /* Hide top nav links on smaller screens */
+    }
+
+    /* Sidebar - already set up for mobile overlay */
+    .sidebar-menu {
+        width: 250px; /* Adjust sidebar width for smaller screens if desired */
+    }
+    .close-sidebar-btn {
+        font-size: 24px; /* Slightly smaller close button for mobile */
+    }
+
+    /* Main content padding for fixed header */
+    main {
+        padding-top: 70px; /* Adjust padding for fixed header on mobile */
+    }
+
+    /* Module title adjustments */
+    .header-title-section h1 {
+        font-size: 2.5em; /* Smaller font size for mobile titles */
+    }
+    .header-title-section h2 {
+        font-size: 1.2em; /* Smaller font size for mobile subtitles */
+    }
+
+    /* Interactive sections grid for mobile */
+    .interactive-sections-grid {
+        padding-top: 24px;
+        padding-bottom: 24px;
+    }
+    .content-section {
+        flex-direction: column; /* Stack button and content vertically */
+    }
+    .section-button {
+        margin-right: 0;
+        margin-bottom: 16px; /* Re-add margin bottom for stacked buttons */
+    }
+
+    /* Footer - mobile adjustments */
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .footer-column {
+        min-width: unset;
+        width: 100%;
+    }
+    .footer-social-icons {
+        flex-direction: row; /* Keep social icons in a row, centered */
+        justify-content: center;
+    }
+    .footer-bottom {
+        flex-wrap: wrap; /* Allow footer bottom links to wrap */
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 20px;
+    }
+    .logo-icon {
+        width: 25px;
+        height: 25px;
+    }
+    .sidebar-menu {
+        width: 220px; /* Even smaller sidebar for very small screens */
+    }
+}
