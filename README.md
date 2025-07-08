@@ -1,1 +1,0 @@
-# Ecomind_WD
