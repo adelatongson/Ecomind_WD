@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f8f8;
+            display: flex; /* Use flexbox for main layout */
+            flex-direction: column; /* Stack header, main, and footer vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            overflow-x: hidden; /* Prevent horizontal scroll due to sidebar */
+            /* Placeholder for login background image */
+            background-image: url('https://placehold.co/1920x1080/E0F2F1/2D5016?text=EcoMind+Background');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: relative;
+        }
+
+        /* Overlay for the background image */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.25);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /*
+        ------------------------------------------
+        NAVIGATION BAR (HEADER) STYLES
+        ------------------------------------------
+        */
+        .header {
+            background-color: #fff;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0; /* Prevents header from shrinking */
+            position: fixed; /* Fixed position at the top */
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 50; /* Ensure header is above other content */
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            padding-left: 5px; /* Added padding to give some space on the left edge */
+            gap: 10px; /* Space between logo and ECOMIND text */
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            gap: 10px; /* Space between logo icon and ECOMIND text */
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Hamburger icon styles */
+        .hamburger-icon {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #333;
+            padding: 5px;
+            display: none; /* Hidden by default on larger screens */
+            flex-shrink: 0;
+            line-height: 1;
+            align-self: center;
+        }
+
+        .top-nav-links {
+            display: flex; /* Visible by default on larger screens */
+            gap: 25px;
+            align-items: center;
+        }
+
+        .top-nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 8px 12px;
+            transition: color 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .top-nav-links a:hover {
+            color: #4CAF50;
+            background-color: #e6f7e6;
+        }
+
+        .top-nav-links .login-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .top-nav-links .login-btn:hover {
+            background-color: #45a049;
+            color: #fff;
+        }
+
+        /*
+        ------------------------------------------
+        SIDEBAR STYLES
+        ------------------------------------------
+        */
+        /* Sliding Sidebar Container (Overlay) */
+        .sidebar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-container.open {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Actual Sliding Sidebar Menu */
+        .sidebar-menu {
+            width: 280px;
+            height: 100%;
+            background-color: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-menu.open {
+            transform: translateX(0);
+        }
+
+        .close-sidebar-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #555;
+            align-self: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-links a {
+            display: block;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar-links a:hover {
+            background-color: #e6f7e6;
+            color: #4CAF50;
+        }
+
+        .sidebar-links a.active {
+            background-color: #d4edda;
+            color: #4CAF50;
+            font-weight: 700;
+        }
+
+        /*
+        ------------------------------------------
+        MAIN CONTENT (LOGIN PAGE) STYLES
+        ------------------------------------------
+        */
+        .main-content {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            gap: 0px; /* No gap between sections */
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+            flex-grow: 1; /* Allow main content to grow */
+            width: 100%;
+            padding-top: 80px; /* Adjust for fixed header */
+        }
+
+        .welcome-section {
+            /* Placeholder for welcome image */
+            background-image: url('https://placehold.co/350x500/A8DADC/2D5016?text=Welcome+to+EcoMind');
+            background-size: cover; /* Changed from contain to cover */
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 20px 0px 0px 20px; /* Left corners rounded */
+            padding: 3rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            height: 500px;
+            width: 350px; /* Set fixed width to match login section */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .welcome-section h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 0px 20px 20px 0px; /* Right corners rounded */
+            padding: 2rem;
+            width: 350px; /* Explicitly set width for clarity */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            height: 500px; /* Explicitly set height for clarity */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-section h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4682B4;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+
+        .password-toggle img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 0.8rem;
+            background: #9ACD32;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #2d5016;
+            cursor: pointer;
+            transition: background 0.3s, opacity 0.3s;
+            margin-bottom: 1rem;
+        }
+        
+        .login-button:disabled {
+            background: #d8e6c0;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .login-button:hover:not(:disabled) {
+            background: #8FBC8F;
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .register-link a {
+            color: #4CAF50;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* User Type Buttons Styling */
+        .user-type-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-type-btn {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .user-type-btn:hover {
+            border-color: #9ACD32;
+            background: #f0f8ff;
+            color: #2d5016;
+        }
+
+        .user-type-btn.active {
+            background: #9ACD32;
+            border-color: #9ACD32;
+            color: #2d5016;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-button {
+            background-color: #9ACD32;
+            color: #2d5016;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            margin-top: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .modal-button:hover {
+            background-color: #8FBC8F;
+        }
+
+        /*
+        ------------------------------------------
+        RESPONSIVE ADJUSTMENTS
+        ------------------------------------------
+        */
+        @media (max-width: 768px) {
+            body {
+                background-image: none; /* Remove background image on mobile for clarity */
+                background-color: #F0FDF4;
+            }
+            .main-content {
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem;
+                padding-top: 5rem;
+                justify-content: flex-start;
+                align-items: center;
+            }
+
+            .welcome-section {
+                display: none; /* Hide welcome image section on mobile */
+            }
+
+            .login-section {
+                width: 100%; /* Full width on mobile */
+                max-width: 400px; /* Max width for mobile */
+                border-radius: 20px; /* All corners rounded */
+                height: auto; /* Height adjusts to content on mobile */
+                align-self: center;
+                backdrop-filter: none;
+                background: white;
+            }
+            /* Show hamburger on small screens, hide top nav */
+            .hamburger-icon {
+                display: block;
+            }
+            .top-nav-links {
+                display: none;
+            }
+        }
+        @media (min-width: 769px) {
+            /* Hide hamburger on large screens, show top nav */
+            .hamburger-icon {
+                display: none;
+            }
+            .top-nav-links {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <button id="hamburger-icon" class="hamburger-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <div class="logo">
+                <div class="logo-icon">
+                    <img src="https://placehold.co/30x30/4CAF50/FFFFFF?text=E" alt="EcoMind Logo">
+                </div>
+                <span>ECOMIND</span>
+            </div>
+        </div>
+        <nav class="top-nav-links">
+            <a href="homepage.html" class="active">Home</a>
+            <a href="modulehomepage.html">Modules</a>
+            <a href="gamehomepage.html">Game</a>
+            <a href="login.html" id="authLink" class="login-btn">Login</a>
+        </nav>
+    </header>       
+
+    <!-- Sidebar Container -->
+    <div id="sidebar-container" class="sidebar-container">
+        <div id="sidebar-menu" class="sidebar-menu">
+            <div class="sidebar-header">
+                <h2>Navigation</h2>
+                <button id="close-sidebar-btn" class="close-sidebar-btn">&times;</button>
+            </div>
+            <ul class="sidebar-links">
+                <li>
+                    <a href="login.html" id="sidebarAuthLink">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                        </svg>
+                        <span>Login</span>
+                    </a>
+                </li>
+                <!-- Other sidebar navigation items can be added here -->
+            </ul>
+            <div id="userIdDisplay" class="user-id-display">Not logged in</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="welcome-section">
+            <h1>Welcome to EcoMind</h1>
+        </div>
+        <div class="login-section">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="user-type-buttons">
+                    <button type="button" class="user-type-btn active" data-user-role="student" onclick="selectUserType(this, 'student')">Student</button>
+                    <button type="button" class="user-type-btn" data-user-role="admin" onclick="selectUserType(this, 'admin')">Admin</button>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Email (e.g., your.email@fit.edu.ph)" required autocomplete="username">
+                </div>
+                <div class="form-group password-field">
+                    <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+                    <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <img id="passwordToggleImg" src="https://placehold.co/20x20/FFFFFF/000000?text=Show" alt="Show password">
+                    </button>
+                </div>
+                <button type="submit" class="login-button" disabled>Login</button>
+            </form>
+            <div class="register-link">
+                Don't have an account? <a href="register.html">Register here</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+            <button onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase variables
+        let app;
+        let auth;
+        let db;
+        let currentUserId = null;
+        let isAuthReady = false; // Flag to indicate if Firebase auth state has been initially checked
+
+        // Initialize Firebase
+        let firebaseConfig = {};
+        let appId = '1:342215046607:web:3b7465bc2a846acb000eba'; // Fallback appId
+
+        console.log("Checking __firebase_config:", typeof __firebase_config, __firebase_config);
+
+        try {
+            if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                try {
+                    firebaseConfig = JSON.parse(__firebase_config);
+                    console.log("Raw __firebase_config (after check):", __firebase_config); // Re-log for clarity
+                    console.log("Parsed firebaseConfig:", firebaseConfig);
+                } catch (parseError) {
+                    console.error("Error parsing __firebase_config:", parseError);
+                    window.showModal("Firebase configuration parsing error. Please check the Canvas environment settings.");
+                    document.getElementById('userIdDisplay').textContent = 'Firebase config parsing error';
+                    throw new Error("Firebase config parsing failed.");
+                }
+            } else {
+                console.warn("__firebase_config is undefined or empty. Firebase will not be initialized with proper config.");
+                window.showModal("Firebase configuration is missing. Please ensure your Canvas environment provides it.");
+                document.getElementById('userIdDisplay').textContent = 'Firebase config missing';
+                throw new Error("Firebase config missing.");
+            }
+
+            if (typeof __app_id !== 'undefined' && __app_id) {
+                appId = __app_id;
+                console.log("App ID from __app_id:", appId);
+            } else {
+                console.warn("__app_id is undefined or empty. Using default-app-id.");
+            }
+
+            if (Object.keys(firebaseConfig).length > 0) {
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                console.log("Firebase initialized successfully. App, Auth, and DB instances created.");
+
+                // Listen for authentication state changes
+                onAuthStateChanged(auth, async (user) => {
+                    console.log("Auth state changed. User:", user ? user.uid : "null");
+                    if (user) {
+                        currentUserId = user.uid;
+                        document.getElementById('userIdDisplay').textContent = `User ID: ${currentUserId}`;
+                        
+                        // Update both top navigation and sidebar links
+                        const authLinkTop = document.getElementById('authLink');
+                        const authLinkSidebar = document.getElementById('sidebarAuthLink');
+
+                        if (authLinkTop) {
+                            authLinkTop.textContent = 'Logout';
+                            authLinkTop.href = '#'; // Prevent navigation
+                            authLinkTop.onclick = handleLogout;
+                        }
+                        if (authLinkSidebar) {
+                            authLinkSidebar.textContent = 'Logout';
+                            authLinkSidebar.href = '#'; // Prevent navigation
+                            authLinkSidebar.onclick = handleLogout;
+                        }
+
+                        // Ensure user profile exists and update last login time
+                        const userProfileRef = doc(db, `artifacts/${appId}/users/${currentUserId}/user_profiles`, currentUserId);
+                        try {
+                            const userProfileSnap = await getDoc(userProfileRef);
+                            if (!userProfileSnap.exists()) {
+                                await setDoc(userProfileRef, {
+                                    email: user.email || null,
+                                    role: user.isAnonymous ? 'anonymous' : 'unknown',
+                                    registrationDate: new Date().toISOString(),
+                                });
+                                console.log("Created new user profile for:", currentUserId);
+                            }
+
+                            await setDoc(userProfileRef, {
+                                lastLogin: new Date().toISOString()
+                            }, { merge: true });
+                            console.log("Last login updated for user:", currentUserId);
+                        } catch (error) {
+                            console.error("Error ensuring/updating user profile:", error);
+                            window.showModal('Error updating user profile: ' + error.message);
+                        }
+
+                    } else {
+                        currentUserId = null;
+                        document.getElementById('userIdDisplay').textContent = 'Not logged in';
+                        
+                        // Update both top navigation and sidebar links
+                        const authLinkTop = document.getElementById('authLink');
+                        const authLinkSidebar = document.getElementById('sidebarAuthLink');
+
+                        if (authLinkTop) {
+                            authLinkTop.textContent = 'Login';
+                            authLinkTop.href = 'login.html';
+                            authLinkTop.onclick = null;
+                        }
+                        if (authLinkSidebar) {
+                            authLinkSidebar.textContent = 'Login';
+                            authLinkSidebar.href = 'login.html';
+                            authLinkSidebar.onclick = null;
+                        }
+                    }
+                    isAuthReady = true;
+                    console.log("isAuthReady set to true.");
+                });
+            } else {
+                console.error("Firebase config is empty after parsing. Firebase will not be initialized.");
+                document.getElementById('userIdDisplay').textContent = 'Firebase not initialized (config empty)';
+                window.showModal("Firebase configuration is empty. Please ensure your Canvas environment provides a valid config.");
+            }
+        } catch (e) {
+            console.error("Critical error during Firebase setup:", e);
+            window.showModal('A critical error occurred during Firebase setup: ' + e.message + '. Check console for details.');
+            document.getElementById('userIdDisplay').textContent = 'Firebase critical error';
+        }
+
+        async function handleLogout(e) {
+            e.preventDefault();
+            console.log("Logout button clicked.");
+            if (!auth) {
+                window.showModal('Firebase Auth is not initialized. Cannot log out.');
+                return;
+            }
+            try {
+                await signOut(auth);
+                window.showModal('You have been logged out.', () => {
+                    window.location.href = 'login.html';
+                });
+            } catch (error) {
+                console.error("Error during logout:", error);
+                window.showModal('Logout failed: ' + error.message);
+            }
+        }
+
+        window.showModal = function(message, callback) {
+            console.log("Showing modal with message:", message);
+            const modal = document.getElementById('myModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.textContent = message;
+            modal.style.display = 'flex';
+            modal.dataset.callback = callback ? 'true' : 'false';
+            if (callback) {
+                modal.callback = callback;
+            }
+        };
+
+        window.closeModal = function() {
+            console.log("Closing modal.");
+            const modal = document.getElementById('myModal');
+            modal.style.display = 'none';
+            if (modal.dataset.callback === 'true' && typeof modal.callback === 'function') {
+                console.log("Executing modal callback.");
+                modal.callback();
+                modal.callback = null;
+                modal.dataset.callback = 'false';
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOMContentLoaded event fired.");
+
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const sidebarContainer = document.getElementById('sidebar-container');
+            const sidebarMenu = document.getElementById('sidebar-menu');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+
+            if (hamburgerIcon) {
+                hamburgerIcon.addEventListener('click', () => {
+                    console.log("Hamburger icon clicked.");
+                    sidebarContainer.classList.add('open');
+                    sidebarMenu.classList.add('open');
+                });
+            }
+
+            if (closeSidebarBtn) {
+                closeSidebarBtn.addEventListener('click', () => {
+                    console.log("Close sidebar button clicked.");
+                    sidebarContainer.classList.remove('open');
+                    sidebarMenu.classList.remove('open');
+                });
+            }
+
+            if (sidebarContainer) {
+                sidebarContainer.addEventListener('click', (event) => {
+                    if (event.target === sidebarContainer) {
+                        console.log("Clicked outside sidebar, closing.");
+                        sidebarContainer.classList.remove('open');
+                        sidebarMenu.classList.remove('open');
+                    }
+                });
+            }
+
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password'); 
+            const loginButton = document.querySelector('.login-button');
+            const loginForm = document.getElementById('loginForm');
+            const userTypeButtons = document.querySelectorAll('.user-type-btn');
+
+            console.log("Elements fetched:", { emailInput, passwordInput, loginButton, loginForm });
+
+            let selectedUserRole = 'student'; // Default to student
+
+            userTypeButtons.forEach(btn => {
+                if (btn.getAttribute('data-user-role') === selectedUserRole) {
+                    btn.classList.add('active');
+                }
+            });
+            console.log("Initial selectedUserRole:", selectedUserRole);
+
+            // Call checkFormValidity on page load to set initial button state
+            checkFormValidity();
+
+
+            window.selectUserType = function(selectedBtn, userRole) {
+                console.log("selectUserType called. Selected role:", userRole);
+                userTypeButtons.forEach(btn => btn.classList.remove('active'));
+                selectedBtn.classList.add('active');
+                selectedUserRole = userRole;
+                checkFormValidity();
+            };
+
+            function checkFormValidity() {
+                console.log("checkFormValidity called.");
+                if (emailInput && passwordInput && loginButton) {
+                    const passwordValue = passwordInput.value.trim();
+                    
+                    // Update placeholders based on selected role
+                    if (selectedUserRole === 'student') {
+                        emailInput.placeholder = "Email (e.g., 2024xxxxx@fit.edu.ph)";
+                        passwordInput.placeholder = "Password";
+                    } else if (selectedUserRole === 'admin') {
+                        emailInput.placeholder = "Email (e.g., 2020xxxxx@fit.edu.ph)";
+                        passwordInput.placeholder = "Password";
+                    }
+
+                    // The button is enabled ONLY if the password field is not empty.
+                    // Email format validation is now entirely handled on form submission via Firebase.
+                    const isValid = (passwordValue.length > 0); 
+                    loginButton.disabled = !isValid;
+                    console.log(`Password: '${passwordValue}', Password Field Not Empty: ${passwordValue.length > 0}, Login button disabled: ${loginButton.disabled}`);
+                }
+            }
+
+            if (emailInput && passwordInput && loginButton) {
+                emailInput.addEventListener('input', checkFormValidity);
+                passwordInput.addEventListener('input', checkFormValidity);
+                console.log("Input event listeners attached to email and password fields.");
+            }
+
+            if (loginForm) {
+                loginForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log("Login form submitted.");
+
+                    if (!auth || !db || !isAuthReady) {
+                        window.showModal('Firebase is not initialized or ready. Please try again or check console for errors.');
+                        console.error("Firebase not ready during login attempt. Auth:", auth, "DB:", db, "isAuthReady:", isAuthReady);
+                        return;
+                    }
+
+                    if (!emailInput || !passwordInput) {
+                        console.error("Email or Password input elements not found on the login form.");
+                        window.showModal('An internal error occurred. Please try again.');
+                        return;
+                    }
+
+                    const email = emailInput.value.trim();
+                    const password = passwordInput.value.trim();
+
+                    // Client-side check for empty password, as the button is now enabled if password field has content.
+                    if (password.length === 0) {
+                        window.showModal('Password cannot be empty.');
+                        return;
+                    }
+
+                    // Email format validation still happens here before Firebase call
+                    let isEmailFormatValid = false;
+                    let errorMessage = '';
+
+                    if (selectedUserRole === 'student') {
+                        const studentEmailRegex = /^2024\d*@fit\.edu\.ph$/;
+                        isEmailFormatValid = studentEmailRegex.test(email);
+                        if (!isEmailFormatValid) {
+                            errorMessage = 'Student email must start with "2024" followed by digits and end with "@fit.edu.ph".';
+                        }
+                    } else if (selectedUserRole === 'admin') {
+                        const adminEmailRegex = /^2020\d*@fit\.edu\.ph$/;
+                        isEmailFormatValid = adminEmailRegex.test(email);
+                        if (!isEmailFormatValid) {
+                            errorMessage = 'Admin email must start with "2020" followed by digits and end with "@fit.edu.ph".';
+                        }
+                    }
+
+                    if (!isEmailFormatValid) {
+                        window.showModal(errorMessage);
+                        return;
+                    }
+
+                    try {
+                        console.log("Attempting Firebase login with email:", email);
+                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                        const user = userCredential.user;
+                        console.log("Firebase login successful. User UID:", user.uid);
+
+                        const userProfileRef = doc(db, `artifacts/${appId}/users/${user.uid}/user_profiles`, user.uid);
+                        console.log("Fetching user profile from:", userProfileRef.path);
+                        const userProfileSnap = await getDoc(userProfileRef);
+
+                        let redirectPage = '';
+                        let successMessage = '';
+
+                        if (userProfileSnap.exists()) {
+                            const userData = userProfileSnap.data();
+                            const userRole = userData.role;
+                            console.log("User profile found. Role:", userRole, "Selected role:", selectedUserRole);
+
+                            // Check for role consistency between login attempt and stored profile
+                            if (userRole === selectedUserRole) {
+                                if (userRole === 'student') {
+                                    redirectPage = 'modulehomepage.html';
+                                    successMessage = 'Welcome back, Student! Login successful.';
+                                } else if (userRole === 'admin') {
+                                    redirectPage = 'statusbar.html';
+                                    successMessage = 'Welcome back, Admin! Login successful.';
+                                }
+                            } else {
+                                console.log("Role mismatch. Logging out user.");
+                                await signOut(auth);
+                                window.showModal(`Login failed: Your account is registered as '${userRole}', but you attempted to log in as '${selectedUserRole}'. Please select the correct role.`);
+                                return;
+                            }
+
+                            console.log("Updating last login time.");
+                            await setDoc(userProfileRef, {
+                                lastLogin: new Date().toISOString()
+                            }, { merge: true });
+
+                            window.showModal(successMessage, function() {
+                                sessionStorage.setItem('isLoggedIn', 'true');
+                                sessionStorage.setItem('userEmail', email);
+                                sessionStorage.setItem('userType', userRole);
+                                console.log("Redirecting to:", redirectPage);
+                                window.location.href = redirectPage;
+                            });
+
+                        } else {
+                            console.log("User profile not found in Firestore. Logging out.");
+                            await signOut(auth);
+                            window.showModal('Login failed: User profile not found in our records. Please register or contact support.');
+                        }
+
+                    } catch (error) {
+                        let firebaseErrorMessage = 'Login failed.';
+                        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+                            firebaseErrorMessage = 'Invalid email or password.';
+                        } else if (error.code === 'auth/invalid-email') {
+                            firebaseErrorMessage = 'The email address is not valid.';
+                        } else if (error.code === 'auth/too-many-requests') {
+                            firebaseErrorMessage = 'Too many login attempts. Access to this account has been temporarily disabled. Please try again later.';
+                        }
+                        console.error("Firebase Auth Error:", error);
+                        window.showModal(firebaseErrorMessage);
+                    }
+                });
+            }
+
+            window.togglePassword = function() {
+                console.log("Toggle password clicked.");
+                const passwordField = document.getElementById('password');
+                const toggleImg = document.getElementById('passwordToggleImg');
+
+                if (passwordField && toggleImg) {
+                    if (passwordField.type === 'password') {
+                        passwordField.type = 'text';
+                        toggleImg.src = 'https://placehold.co/20x20/FFFFFF/000000?text=Hide';
+                        toggleImg.alt = 'Hide password';
+                    } else {
+                        passwordField.type = 'password';
+                        toggleImg.src = 'https://placehold.co/20x20/FFFFFF/000000?text=Show';
+                        toggleImg.alt = 'Show password';
+                    }
+                }
+            };
+        });
+    </script>
+
+    <script>
+        // Replace these values with your actual Firebase config!
+        window.__firebase_config = JSON.stringify({
+            apiKey: "AIzaSyCXhfb3vyz3uWd-4p3t4UudLPzT-PD9JtE",
+            authDomain: "ecomind-164ad.firebaseapp.com",
+            projectId: "ecomind-164ad",
+            storageBucket: "ecomind-164ad.firebasestorage.app",
+            messagingSenderId: "342215046607",
+            appId: "1:342215046607:web:3b7465bc2a846acb000eba"
+        });
+        window.__app_id = "1:342215046607:web:3b7465bc2a846acb000eba";
+    </script>
+</body>
+</html>

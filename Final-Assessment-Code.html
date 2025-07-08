@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Assessment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/cssassessmentcode.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <button class="hamburger-icon" id="hamburger-icon">☰</button>
+            <div class="logo">
+                <span class="logo-icon">
+                    <img src="images/logoecomind.svg" alt="Leaf Icon">
+                </span>
+                ECOMIND
+            </div>
+        </div>
+        <nav class="top-nav-links">
+            <a href="homepage.html">Home</a>
+            <a href="modulehomepage.html">Modules</a>
+            <a href="gamehomepage.html">Game</a>
+            <div id="login-status-container">
+            <a href="login.html" class="login-button" id="loginLink">Login</a>
+            <div id="userAvatarContainer" class="user-avatar-container hidden">
+                <img id="userAvatarImg" src="https://static.vecteezy.com/system/resources/thumbnails/019/879/186/small/user-icon-on-transparent-background-free-png.png" alt="User Avatar">
+                <div class="profile-dropdown-content" id="userDropdownMenu"> 
+                    <a href="profile.html" id="profileLinkDropdown">My Profile</a>
+                    <a href="#" id="logoutButton">Logout</a>
+</div>
+            </div>
+        </div>
+            </nav>
+    </header>
+
+    <div class="sidebar-container" id="sidebar-container">
+        <aside class="sidebar-menu" id="sidebar-menu">
+            <button class="close-sidebar-btn" id="close-sidebar-btn">&times;</button>
+            <ul class="sidebar-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="modulehomepage.html">Modules</a></li>
+                <li><a href="finalhomepage.html" class="active">Final Assessment</a></li>
+            </ul>
+        </aside>
+    </div>
+
+    <section class="hero">
+        <div class="hero-image">
+            <img src="https://i.ibb.co/xSYNBbhV/Design.png" alt="Hero Image">
+        </div>
+        <div class="hero-content">
+            <h1>Final Assessment</h1>
+            <p>Sustainable Development Goals</p>
+            <p>Test your knowledge from all modules through an interactive trial assessment.</p>
+            <p>Complete it to qualify for certification.</p>
+            <p>Accelerate your understanding of proper waste segregation.</p>
+        </div>
+    </section>
+
+    <div class="access-code-section-wrapper">
+        <div class="access-code-content">
+            <label for="accessCodeInput">Access Code:</label>
+            <div class="input-password-wrapper">
+                <input type="password" id="accessCodeInput" placeholder=""> <i class="fas fa-eye password-toggle" id="passwordToggle"></i> </div>
+            <p id="errorMessage" class="error-message"></p>
+            <a href="quizpage.html" class="start-btn" id="startBtn">Start</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-column">
+                <h3>ECOMIND</h3>
+                <div class="footer-social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="#"><i class="fab fa-facebook-f"></i> Facebook</a>
+                    <a href="#"><i class="fab fa-pinterest"></i> Pinterest</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>About Us</h3>
+                <ul>
+                    <li><a href="#">About Ecomind</a></li>
+                    <li><a href="#">Vision & Mission</a></li>
+                    <li><a href="#">Partnership</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li>1-800-555-5555</li>
+                    <li><a href="#">Join us</a></li>
+                    <li><a href="#">Email us</a></li>
+                    <li><a href="#">Customer Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Learning</h3>
+                <ul>
+                    <li><a href="#">Modules</a></li>
+                    <li><a href="#">Quizzes</a></li>
+                    <li><a href="#">Games</a></li>
+                    <li><a href="#">Volunteers</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2025 EcoMind</span>
+            <a href="#">EcoMind Policies</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">About us</a>
+        </div>
+    </footer>
+
+<script>
+    // This inline script remains in the <head> or at the top of your body
+    // to ensure Firebase config is available before the main module script runs.
+    window.__firebase_config = JSON.stringify({
+        apiKey: "AIzaSyCXhfb3vyz3uWd-4p3t4UudLPzT-PD9JtE",
+        authDomain: "ecomind-164ad.firebaseapp.com",
+        projectId: "ecomind-164ad",
+        storageBucket: "ecomind-164ad.firebasestorage.app",
+        messagingSenderId: "342215046607",
+        appId: "1:342215046607:web:3b7465bc2a846acb000eba"
+    });
+    window.__app_id = "1:342215046607:web:3b7465bc2a846acb000eba";
+
+    // Simple modal function (if not already defined in your global scope)
+    // This is a placeholder, you might have a more sophisticated modal system.
+    if (typeof window.showModal === 'undefined') {
+        window.showModal = function(message, callback) {
+            alert(message);
+            if (callback) callback();
+        };
+    }
+</script>
+<script type="module">
+    // Firebase Imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Global Firebase variables
+    let app;
+    let auth;
+    let db;
+    let currentUserId = null;
+    let isAuthReady = false; // Flag to indicate if Firebase auth state has been initially checked
+
+    // --- Firebase Initialization & Authentication State Management ---
+    try {
+        let firebaseConfig = {};
+        let appId = 'default-app-id'; // Fallback, primarily overridden by window.__app_id
+
+        if (typeof window.__firebase_config !== 'undefined' && window.__firebase_config) {
+            try {
+                firebaseConfig = JSON.parse(window.__firebase_config);
+                console.log("Parsed firebaseConfig from global window.");
+            } catch (parseError) {
+                console.error("Error parsing __firebase_config:", parseError);
+                window.showModal("Firebase configuration parsing error. Please check the Canvas environment settings.");
+                throw new Error("Firebase config parsing failed.");
+            }
+        } else {
+            console.warn("__firebase_config is undefined or empty. Firebase will not be initialized with proper config.");
+            window.showModal("Firebase configuration is missing. Please ensure your Canvas environment provides it.");
+            throw new Error("Firebase config missing.");
+        }
+
+        if (typeof window.__app_id !== 'undefined' && window.__app_id) {
+            appId = window.__app_id;
+            console.log("App ID from global window:", appId);
+        } else {
+            console.warn("__app_id is undefined or empty. Using default-app-id.");
+        }
+
+        if (Object.keys(firebaseConfig).length > 0) {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            console.log("Firebase initialized successfully. App, Auth, and DB instances created.");
+
+            // Listen for authentication state changes
+            onAuthStateChanged(auth, async (user) => {
+                console.log("Auth state changed. User:", user ? user.uid : "null");
+
+                // Get references to all relevant UI elements for TOP NAV
+                const loginLink = document.getElementById('loginLink');
+                const userAvatarContainer = document.getElementById('userAvatarContainer');
+                const userAvatarImg = document.getElementById('userAvatarImg');
+                const userDropdownMenu = document.getElementById('userDropdownMenu');
+                const logoutButton = document.getElementById('logoutButton');
+                const profileLinkDropdown = document.getElementById('profileLinkDropdown');
+
+                // Get references to all relevant UI elements for SIDEBAR
+                const sidebarLoginListItem = document.getElementById('sidebarLoginListItem');
+                const sidebarUserAvatarListItem = document.getElementById('sidebarUserAvatarListItem');
+                const sidebarUserAvatarImg = document.getElementById('sidebarUserAvatarImg');
+                const sidebarLogoutButton = document.getElementById('sidebarLogoutButton');
+                const sidebarProfileLinkDropdown = document.getElementById('sidebarProfileLinkDropdown');
+
+                if (user) {
+                    // User is signed in
+                    currentUserId = user.uid;
+                    const userIdDisplay = document.getElementById('userIdDisplay'); // Assuming this exists for debugging
+                    if (userIdDisplay) userIdDisplay.textContent = `User ID: ${currentUserId}`;
+
+                    // --- Top Navigation UI Update (Logged In) ---
+                    if (loginLink) loginLink.classList.add('hidden');
+                    if (userAvatarContainer) {
+                        userAvatarContainer.classList.remove('hidden');
+                        if (userAvatarImg) {
+                            userAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
+                            userAvatarImg.alt = user.displayName || 'User Avatar';
+                        }
+                        userAvatarContainer.onclick = toggleUserDropdown;
+                    }
+                    if (logoutButton) logoutButton.onclick = handleLogout;
+                    if (profileLinkDropdown) profileLinkDropdown.href = `profile.html?uid=${user.uid}`;
+
+                    // --- Sidebar Navigation UI Update (Logged In) ---
+                    if (sidebarLoginListItem) sidebarLoginListItem.classList.add('hidden');
+                    if (sidebarUserAvatarListItem) {
+                        sidebarUserAvatarListItem.classList.remove('hidden');
+                        if (sidebarUserAvatarImg) {
+                            sidebarUserAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
+                            sidebarUserAvatarImg.alt = user.displayName || 'User Avatar';
+                        }
+                    }
+                    if (sidebarLogoutButton) sidebarLogoutButton.onclick = handleLogout;
+                    if (sidebarProfileLinkDropdown) sidebarProfileLinkDropdown.href = `profile.html?uid=${user.uid}`;
+
+                    // --- Firestore User Profile Management ---
+                    const userProfileRef = doc(db, `artifacts/${appId}/users/${currentUserId}/user_profiles`, currentUserId);
+                    try {
+                        const userProfileSnap = await getDoc(userProfileRef);
+                        if (!userProfileSnap.exists()) {
+                            await setDoc(userProfileRef, {
+                                email: user.email || null,
+                                displayName: user.displayName || null,
+                                photoURL: user.photoURL || null,
+                                role: user.isAnonymous ? 'anonymous' : 'standard',
+                                registrationDate: new Date().toISOString(),
+                            }, { merge: true });
+                            console.log("Created new user profile for:", currentUserId);
+                        }
+                        await setDoc(userProfileRef, {
+                            lastLogin: new Date().toISOString()
+                        }, { merge: true });
+                        console.log("Last login updated for user:", currentUserId);
+                    } catch (error) {
+                        console.error("Error ensuring/updating user profile in Firestore:", error);
+                        window.showModal('Error updating user profile: ' + error.message);
+                    }
+
+                } else {
+                    // User is signed out
+                    currentUserId = null;
+                    const userIdDisplay = document.getElementById('userIdDisplay');
+                    if (userIdDisplay) userIdDisplay.textContent = 'Not logged in';
+
+                    // --- Top Navigation UI Update (Logged Out) ---
+                    if (loginLink) {
+                        loginLink.classList.remove('hidden');
+                        loginLink.textContent = 'Login';
+                        loginLink.href = 'login.html';
+                        loginLink.onclick = null;
+                    }
+                    if (userAvatarContainer) userAvatarContainer.classList.add('hidden');
+                    if (userDropdownMenu) userDropdownMenu.classList.remove('show');
+
+                    // --- Sidebar Navigation UI Update (Logged Out) ---
+                    if (sidebarLoginListItem) {
+                        sidebarLoginListItem.classList.remove('hidden');
+                        const sidebarLoginLink = document.getElementById('sidebarLoginLink');
+                        if (sidebarLoginLink) {
+                            sidebarLoginLink.textContent = 'Login';
+                            sidebarLoginLink.href = 'login.html';
+                            sidebarLoginLink.onclick = null;
+                        }
+                    }
+                    if (sidebarUserAvatarListItem) sidebarUserAvatarListItem.classList.add('hidden');
+                }
+                isAuthReady = true;
+                console.log("Firebase Auth state initial check complete (isAuthReady = true).");
+            });
+        } else {
+            console.error("Firebase config is empty after parsing. Firebase will not be initialized.");
+            const userIdDisplay = document.getElementById('userIdDisplay');
+            if (userIdDisplay) userIdDisplay.textContent = 'Firebase not initialized (config empty)';
+            window.showModal("Firebase configuration is empty. Please ensure your Canvas environment provides a valid config.");
+        }
+    } catch (e) {
+        console.error("Critical error during Firebase setup:", e);
+        window.showModal('A critical error occurred during Firebase setup: ' + e.message + '. Check console for details.');
+        const userIdDisplay = document.getElementById('userIdDisplay');
+        if (userIdDisplay) userIdDisplay.textContent = 'Firebase critical error';
+    }
+
+    // --- Logout Function ---
+    async function handleLogout(e) {
+        e.preventDefault();
+        console.log("Logout button clicked.");
+
+        if (!auth) {
+            window.showModal('Firebase Auth is not initialized. Cannot log out.');
+            return;
+        }
+        try {
+            await signOut(auth);
+            localStorage.removeItem('token');
+            window.showModal('You have been logged out.', () => {
+                window.location.href = 'login.html';
+            });
+        } catch (error) {
+            console.error("Error during logout:", error);
+            window.showModal('Logout failed: ' + error.message);
+        }
+    }
+
+    // --- User Avatar Dropdown Toggle (for Top Nav) ---
+    function toggleUserDropdown() {
+        const userDropdownMenu = document.getElementById('userDropdownMenu');
+        if (userDropdownMenu) {
+            userDropdownMenu.classList.toggle('show');
+        }
+    }
+
+    // --- Close dropdown if clicked outside ---
+    document.addEventListener('click', (event) => {
+        const userAvatarContainer = document.getElementById('userAvatarContainer');
+        const userDropdownMenu = document.getElementById('userDropdownMenu');
+        if (userAvatarContainer && userDropdownMenu && !userAvatarContainer.contains(event.target) && !userDropdownMenu.contains(event.target)) {
+            userDropdownMenu.classList.remove('show');
+        }
+    });
+
+    // --- All DOMContentLoaded related logic consolidated here ---
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log("DOMContentLoaded event fired.");
+
+        // Set the current year in the footer
+        const yearSpan = document.getElementById('year');
+        if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear();
+        }
+
+        // Sidebar elements
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+        const sidebarContainer = document.getElementById('sidebar-container');
+        const sidebarMenu = document.getElementById('sidebar-menu');
+
+        // Access Code elements (Assuming these are on the page where this script is included.
+        // If not, they will safely be skipped due to null checks.)
+        const accessCodeInput = document.getElementById('accessCodeInput');
+        const startButton = document.getElementById('startBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const passwordToggle = document.getElementById('passwordToggle'); // Get the eye icon element
+
+        // Sidebar Toggle Logic
+        if (hamburgerIcon && sidebarContainer && sidebarMenu) {
+            hamburgerIcon.addEventListener('click', () => {
+                sidebarContainer.classList.add('open');
+                sidebarMenu.classList.add('open');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when sidebar is open
+            });
+        }
+
+        if (closeSidebarBtn && sidebarContainer && sidebarMenu) {
+            closeSidebarBtn.addEventListener('click', () => {
+                sidebarContainer.classList.remove('open');
+                sidebarMenu.classList.remove('open');
+                document.body.style.overflow = ''; // Restore scrolling
+            });
+        }
+
+        if (sidebarContainer && sidebarMenu) {
+            // Close sidebar if clicking outside the menu
+            sidebarContainer.addEventListener('click', (event) => {
+                if (event.target === sidebarContainer) {
+                    sidebarContainer.classList.remove('open');
+                    sidebarMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+
+        const sidebarLinks = document.querySelectorAll('.sidebar-links a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (sidebarContainer && sidebarMenu) {
+                    sidebarContainer.classList.remove('open');
+                    sidebarMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Access Code Validation Logic
+        if (startButton && accessCodeInput && errorMessage) {
+            startButton.addEventListener('click', (event) => {
+                const enteredCode = accessCodeInput.value.trim(); // Get and trim the input value
+                const correctCode = 'ecomind12345'; // The required access code
+
+                if (enteredCode === correctCode) {
+                    // If the code is correct, allow the default link behavior (navigation)
+                    errorMessage.classList.remove('show'); // Hide any error message
+                    errorMessage.textContent = ''; // Clear error text
+                    // The <a> tag's href will handle the redirection automatically
+                } else {
+                    // If the code is incorrect
+                    event.preventDefault(); // Stop the link from navigating
+                    errorMessage.textContent = 'Invalid Access Code'; // Set error text
+                    errorMessage.classList.add('show'); // Show the error message
+                }
+            });
+
+            // Optional: Clear the error message when the user starts typing again
+            accessCodeInput.addEventListener('input', () => {
+                errorMessage.classList.remove('show');
+                errorMessage.textContent = '';
+            });
+        }
+
+        // NEW: Password Toggle Logic
+        if (passwordToggle && accessCodeInput) {
+            passwordToggle.addEventListener('click', () => {
+                // Toggle the type attribute
+                const type = accessCodeInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                accessCodeInput.setAttribute('type', type);
+
+                // Toggle the eye icon (assuming Font Awesome classes are used)
+                passwordToggle.classList.toggle('fa-eye');
+                passwordToggle.classList.toggle('fa-eye-slash');
+            });
+        }
+
+        // Comment section elements and logic
+        const dropBoxContainer = document.getElementById("dropBoxContainer");
+        const submitBtn = document.querySelector(".comment-form-container button[type='submit']");
+        const commentText = document.getElementById("comment");
+        const anonymousCheckbox = document.getElementById("anonymousCheckbox");
+
+        function loadComments() {
+            if (!dropBoxContainer) {
+                console.warn("dropBoxContainer not found, cannot load comments.");
+                return;
+            }
+            dropBoxContainer.innerHTML = ""; // Clear existing comments
+            const comments = JSON.parse(localStorage.getItem("comments") || "[]");
+
+            comments.reverse().forEach((comment, index) => {
+                const div = document.createElement("div");
+                div.className = "drop-box-item";
+
+                const commentQuote = document.createElement("p");
+                commentQuote.className = "comment-quote";
+                commentQuote.textContent = `"${comment.text}"`;
+                div.appendChild(commentQuote);
+
+                const authorInfo = document.createElement("div");
+                authorInfo.className = "comment-author-info";
+
+                const img = document.createElement("img");
+                if (comment.anonymous) {
+                    img.src = "https://placehold.co/48x48/CCCCCC/000000?text=Anon";
+                    img.alt = "Anonymous";
+                } else {
+                    img.src = "https://placehold.co/48x48/4CAF50/FFFFFF?text=User";
+                    img.alt = "User";
+                }
+                authorInfo.appendChild(img);
+
+                const authorDetails = document.createElement("div");
+                authorDetails.className = "author-details";
+
+                const authorName = document.createElement("strong");
+                authorName.textContent = comment.anonymous ? "Anonymous" : "User";
+                authorDetails.appendChild(authorName);
+
+                const commentDescription = document.createElement("p");
+                commentDescription.className = "comment-description";
+                commentDescription.textContent = comment.text.substring(0, 50) + (comment.text.length > 50 ? '...' : '');
+                authorDetails.appendChild(commentDescription);
+
+                authorInfo.appendChild(authorDetails);
+                div.appendChild(authorInfo);
+
+                dropBoxContainer.appendChild(div);
+            });
+        }
+
+        if (submitBtn && commentText && anonymousCheckbox) {
+            submitBtn.addEventListener("click", () => {
+                const text = commentText.value.trim();
+                if (text === "") {
+                    console.error("Please enter a comment.");
+                    return;
+                }
+                const comments = JSON.parse(localStorage.getItem("comments") || "[]");
+                comments.push({
+                    text,
+                    anonymous: anonymousCheckbox.checked,
+                });
+                localStorage.setItem("comments", JSON.stringify(comments));
+                commentText.value = "";
+                anonymousCheckbox.checked = false;
+                loadComments();
+            });
+        }
+
+        // Load comments when the page first loads
+        loadComments();
+    });
+</script>

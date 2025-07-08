@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecomind - Final Assessment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/cssquizpage.css">
+     <script>
+        window.__firebase_config = JSON.stringify({
+            apiKey: "AIzaSyCXhfb3vyz3uWd-4p3t4UudLPzT-PD9JtE",
+            authDomain: "ecomind-164ad.firebaseapp.com",
+            projectId: "ecomind-164ad",
+            storageBucket: "ecomind-164ad.firebasestorage.app",
+            messagingSenderId: "342215046607",
+            appId: "1:342215046607:web:3b7465bc2a846acb000eba"
+        });
+        window.__app_id = "1:342215046607:web:3b7465bc2a846acb000eba";
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <button class="hamburger-icon" id="hamburger-icon">☰</button>
+            <div class="logo">
+                <span class="logo-icon">
+                    <img src="https://i.ibb.co/8gNQ5CpH/logo.png" alt="Leaf Icon">
+                </span>
+                ECOMIND
+            </div>
+        </div>
+        <nav class="top-nav-links">
+            <a href="homepage.html" class="active">Home</a>
+            <a href="modulehomepage.html">Modules</a>
+            <a href="gamehomepage.html">Game</a>
+             <div id="login-status-container">
+            <a href="login.html" class="login-button" id="loginLink">Login</a>
+            <div id="userAvatarContainer" class="user-avatar-container hidden">
+                <img id="userAvatarImg" src="https://static.vecteezy.com/system/resources/thumbnails/019/879/186/small/user-icon-on-transparent-background-free-png.png" alt="User Avatar">
+                <div class="profile-dropdown-content" id="userDropdownMenu"> 
+                    <a href="profile.html" id="profileLinkDropdown">My Profile</a>
+                    <a href="#" id="logoutButton">Logout</a>        
+                </div>
+            </div>
+        </div>
+        </nav>
+    </header>
+
+    <div class="sidebar-container" id="sidebar-container">
+        <aside class="sidebar-menu" id="sidebar-menu">
+            <button class="close-sidebar-btn" id="close-sidebar-btn">&times;</button>
+            <ul class="sidebar-links">
+                <li><a href="homepage.html" class="active">Home</a></li>
+                <li><a href="modulehomepage.html">Modules</a></li>
+                <li><a href="finalhomepage.html">Final Assessment</a></li>
+            </ul>
+        </aside>
+    </div>
+
+    <main>
+        <div class="quiz-container" id="quiz-container">
+            <div class="question-header">
+                <div class="item-number">Item 1</div>
+                <div class="time" id="time">Time: 15:00</div>
+            </div>
+            <div class="question">
+                <p id="question-text"></p>
+            </div>
+            <div class="options">
+                <div class="option" onclick="selectOption(this)"></div>
+                <div class="option" onclick="selectOption(this)"></div>
+                <div class="option" onclick="selectOption(this)"></div>
+                <div class="option" onclick="selectOption(this)"></div>
+            </div>
+            <div class="navigation">
+                <button class="submit-button" onclick="nextQuestion()">Submit Answer</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-column">
+                <h3>ECOMIND</h3>
+                <div class="footer-social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="#"><i class="fab fa-facebook-f"></i> Facebook</a>
+                    <a href="#"><i class="fab fa-pinterest"></i> Pinterest</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>About Us</h3>
+                <ul>
+                    <li><a href="#">About Ecomind</a></li>
+                    <li><a href="#">Vision & Mission</a></li>
+                    <li><a href="#">Partnership</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li>1-800-555-5555</li>
+                    <li><a href="#">Join us</a></li>
+                    <li><a href="#">Email us</a></li>
+                    <li><a href="#">Customer Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Learning</h3>
+                <ul>
+                    <li><a href="#">Modules</a></li>
+                    <li><a href="#">Quizzes</a></li>
+                    <li><a href="#">Games</a></li>
+                    <li><a href="#">Volunteers</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2025 EcoMind</span>
+            <a href="#">EcoMind Policies</a>
+            <a href="#">Terms of Use</a>
+            <a href="aboutus.html">About us</a>
+        </div>
+    </footer>
+
+<script type="module">
+        // Firebase Imports (MUST be at the top of a module script)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase variables
+        let app;
+        let auth;
+        let db;
+        let currentUserId = null;
+        let hasAuthChecked = false; // Flag to indicate if Firebase auth state has been initially checked
+
+        // --- GLOBAL HELPER FUNCTIONS (Defined early to be accessible anywhere) ---
+
+        // Custom message box function (replaces alert())
+        window.showModal = function(message, callback) {
+            console.log("Showing modal with message:", message);
+            const modal = document.getElementById('myModal');
+            const modalMessage = document.getElementById('modalMessage');
+            const modalOkButton = document.querySelector('#myModal .modal-ok-button');
+
+            if (modal && modalMessage && modalOkButton) {
+                modalMessage.textContent = message;
+                modal.style.display = 'flex'; // Use flex to center
+
+                // Remove previous listeners and add a new one to prevent multiple callbacks
+                const newOkButton = modalOkButton.cloneNode(true);
+                modalOkButton.parentNode.replaceChild(newOkButton, modalOkButton);
+
+                newOkButton.addEventListener('click', () => {
+                    closeModal();
+                    if (callback) {
+                        callback();
+                    }
+                });
+            } else {
+                console.error("Modal elements (myModal, modalMessage, modalOkButton) not found. Falling back to alert. Message:", message);
+                alert(message); // Fallback to alert if modal elements are missing
+                if (callback) callback(); // Still call callback if it exists
+            }
+        };
+
+        window.closeModal = function() {
+            console.log("Closing modal.");
+            const modal = document.getElementById('myModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // --- Logout Function ---
+        async function handleLogout(e) {
+            e.preventDefault(); // Prevent default link behavior
+            console.log("Logout button clicked.");
+
+            if (!auth) {
+                window.showModal('Firebase Auth is not initialized. Cannot log out.');
+                return;
+            }
+            try {
+                await signOut(auth);
+                localStorage.removeItem('token'); // Clear any local storage tokens
+                window.showModal('You have been logged out.', () => {
+                    window.location.href = 'login.html'; // Redirect to login page after logout
+                });
+            } catch (error) {
+                console.error("Error during logout:", error);
+                window.showModal('Logout failed: ' + error.message);
+            }
+        }
+
+        // --- User Avatar Dropdown Toggle (for Top Nav) ---
+        function toggleUserDropdown() {
+            const userDropdownMenu = document.getElementById('userDropdownMenu');
+            if (userDropdownMenu) {
+                userDropdownMenu.classList.toggle('show');
+            }
+        }
+
+        // --- Function to update UI based on Auth State ---
+        async function updateAuthUI(user) {
+            console.log("updateAuthUI called. User:", user ? user.uid : "null");
+
+            const loginLink = document.getElementById('loginLink');
+            const userAvatarContainer = document.getElementById('userAvatarContainer');
+            const userAvatarImg = document.getElementById('userAvatarImg');
+            const userDropdownMenu = document.getElementById('userDropdownMenu');
+            const logoutButton = document.getElementById('logoutButton');
+            const profileLinkDropdown = document.getElementById('profileLinkDropdown');
+
+            const sidebarLoginListItem = document.getElementById('sidebarLoginListItem');
+            const sidebarUserAvatarListItem = document.getElementById('sidebarUserAvatarListItem');
+            const sidebarUserAvatarImg = document.getElementById('sidebarUserAvatarImg');
+            const sidebarLogoutButton = document.getElementById('sidebarLogoutButton');
+            const sidebarProfileLinkDropdown = document.getElementById('sidebarProfileLinkDropdown');
+            const sidebarLoginLink = document.getElementById('sidebarLoginLink');
+
+            if (user) {
+                console.log("User is signed in. UID:", user.uid);
+                currentUserId = user.uid;
+
+                // Top Navigation UI Update
+                if (loginLink) loginLink.classList.add('hidden');
+                if (userAvatarContainer) {
+                    userAvatarContainer.classList.remove('hidden');
+                    if (userAvatarImg) {
+                        userAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
+                        userAvatarImg.alt = user.displayName || 'User Avatar';
+                        console.log("Top Nav Avatar SRC set to:", userAvatarImg.src);
+                    }
+                    userAvatarContainer.onclick = toggleUserDropdown;
+                }
+                if (logoutButton) logoutButton.onclick = handleLogout;
+                if (profileLinkDropdown) profileLinkDropdown.href = `profile.html?uid=${user.uid}`;
+
+                // Sidebar Navigation UI Update
+                if (sidebarLoginListItem) sidebarLoginListItem.classList.add('hidden');
+                if (sidebarUserAvatarListItem) {
+                    sidebarUserAvatarListItem.classList.remove('hidden');
+                    if (sidebarUserAvatarImg) {
+                        sidebarUserAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
+                        sidebarUserAvatarImg.alt = user.displayName || 'User Avatar';
+                        console.log("Sidebar Avatar SRC set to:", sidebarUserAvatarImg.src);
+                    }
+                }
+                if (sidebarLogoutButton) sidebarLogoutButton.onclick = handleLogout;
+                if (sidebarProfileLinkDropdown) sidebarProfileLinkDropdown.href = `profile.html?uid=${user.uid}`;
+
+                // Firestore User Profile Management
+                if (db && appId && currentUserId) { // Ensure db, appId, currentUserId are available
+                    const userProfileRef = doc(db, `artifacts/${appId}/users/${currentUserId}/user_profiles`, currentUserId);
+                    try {
+                        const userProfileSnap = await getDoc(userProfileRef);
+                        if (!userProfileSnap.exists()) {
+                            await setDoc(userProfileRef, {
+                                email: user.email || null,
+                                displayName: user.displayName || null,
+                                photoURL: user.photoURL || null,
+                                role: user.isAnonymous ? 'anonymous' : 'standard',
+                                registrationDate: new Date().toISOString(),
+                            }, { merge: true });
+                            console.log("Created new user profile for:", currentUserId);
+                        }
+                        await setDoc(userProfileRef, {
+                            lastLogin: new Date().toISOString()
+                        }, { merge: true });
+                        console.log("Last login updated for user:", currentUserId);
+                    } catch (error) {
+                        console.error("Error ensuring/updating user profile in Firestore:", error);
+                        window.showModal('Error updating user profile: ' + error.message);
+                    }
+                } else {
+                    console.warn("Firestore or user ID not available for profile management.");
+                }
+
+            } else {
+                console.log("User is signed out.");
+                currentUserId = null;
+
+                // Top Navigation UI Update
+                if (loginLink) {
+                    loginLink.classList.remove('hidden');
+                    loginLink.textContent = 'Login';
+                    loginLink.href = 'login.html';
+                    loginLink.onclick = null;
+                }
+                if (userAvatarContainer) userAvatarContainer.classList.add('hidden');
+                if (userDropdownMenu) userDropdownMenu.classList.remove('show');
+
+                // Sidebar Navigation UI Update
+                if (sidebarLoginListItem) {
+                    sidebarLoginListItem.classList.remove('hidden');
+                    if (sidebarLoginLink) {
+                        sidebarLoginLink.textContent = 'Login';
+                        sidebarLoginLink.href = 'login.html';
+                        sidebarLoginLink.onclick = null;
+                    }
+                }
+                if (sidebarUserAvatarListItem) sidebarUserAvatarListItem.classList.add('hidden');
+            }
+        }
+
+
+        // --- Firebase Initialization & Authentication State Management ---
+        // This runs immediately when the module script is loaded
+        let firebaseConfig = {};
+        let appId = '1:342215046607:web:3b7465bc2a846acb000eba'; // Fallback appId, primarily overridden by window.__app_id
+
+        console.log("Checking __firebase_config from global window:", typeof window.__firebase_config, window.__firebase_config);
+        console.log("Checking __app_id from global window:", typeof window.__app_id, window.__app_id);
+
+        try {
+            if (typeof window.__firebase_config !== 'undefined' && window.__firebase_config) {
+                try {
+                    firebaseConfig = JSON.parse(window.__firebase_config);
+                    console.log("Parsed firebaseConfig:", firebaseConfig);
+                } catch (parseError) {
+                    console.error("Error parsing __firebase_config:", parseError);
+                    window.showModal("Firebase configuration parsing error. Please check the Canvas environment settings.");
+                    throw new Error("Firebase config parsing failed.");
+                }
+            } else {
+                console.warn("__firebase_config is undefined or empty. Firebase will not be initialized with proper config.");
+                window.showModal("Firebase configuration is missing. Please ensure your Canvas environment provides it.");
+                throw new Error("Firebase config missing.");
+            }
+
+            if (typeof window.__app_id !== 'undefined' && window.__app_id) {
+                appId = window.__app_id;
+                console.log("App ID from __app_id:", appId);
+            } else {
+                console.warn("__app_id is undefined or empty. Using default-app-id.");
+            }
+
+            if (Object.keys(firebaseConfig).length > 0) {
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                console.log("Firebase initialized successfully. App, Auth, and DB instances created.");
+
+                // Listen for authentication state changes
+                onAuthStateChanged(auth, async (user) => {
+                    console.log("Auth state changed. User:", user ? user.uid : "null");
+                    currentUserId = user ? user.uid : null; // Update currentUserId immediately
+
+                    if (document.readyState === 'loading') {
+                        // If DOM is still loading, wait for DOMContentLoaded to update UI
+                        console.log("Auth state changed before DOMContentLoaded. Will update UI on DOMContentLoaded.");
+                        // The DOMContentLoaded listener below will then call updateAuthUI
+                    } else {
+                        // If DOM is already loaded, update UI immediately
+                        console.log("Auth state changed after DOMContentLoaded. Updating UI immediately.");
+                        await updateAuthUI(user);
+                    }
+                    hasAuthChecked = true; // Mark that the initial auth check has occurred
+                    console.log("Firebase Auth state initial check complete (hasAuthChecked = true).");
+                });
+            } else {
+                console.error("Firebase config is empty after parsing. Firebase will not be initialized.");
+                window.showModal("Firebase configuration is empty. Please ensure your Canvas environment provides a valid config.");
+            }
+        } catch (e) {
+            console.error("Critical error during Firebase setup:", e);
+            window.showModal('A critical error occurred during Firebase setup: ' + e.message + '. Check console for details.');
+        }
+
+
+        // --- All other DOM-related scripts should go inside DOMContentLoaded ---
+        document.addEventListener('DOMContentLoaded', async () => { // Changed to async to await updateAuthUI
+            console.log("DOMContentLoaded event fired for general scripts.");
+
+            // Set the current year in the footer
+            const yearSpan = document.getElementById('year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+
+            // Update UI based on the current auth state, if Firebase has already checked
+            if (hasAuthChecked) {
+                console.log("DOMContentLoaded: Auth state already checked, updating UI.");
+                await updateAuthUI(auth.currentUser); // auth.currentUser will be null if logged out
+            } else {
+                console.log("DOMContentLoaded: Waiting for Auth state to be checked by onAuthStateChanged.");
+                // onAuthStateChanged will handle the UI update once it fires
+            }
+
+
+            // --- Sidebar Functionality ---
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const sidebarContainer = document.getElementById('sidebar-container');
+            const sidebarMenu = document.getElementById('sidebar-menu');
+            const sidebarLinks = document.querySelectorAll('.sidebar-links a');
+            const topNavLinks = document.querySelectorAll('.top-nav-links a');
+
+            function openSidebar() {
+                if (sidebarContainer && sidebarMenu) {
+                    sidebarContainer.classList.add('open');
+                    sidebarMenu.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            function closeSidebar() {
+                if (sidebarContainer && sidebarMenu) {
+                    sidebarContainer.classList.remove('open');
+                    sidebarMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            if (hamburgerIcon) hamburgerIcon.addEventListener('click', openSidebar);
+            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
+
+            if (sidebarContainer) {
+                sidebarContainer.addEventListener('click', (event) => {
+                    if (event.target === sidebarContainer) { // Close if clicked on the overlay
+                        closeSidebar();
+                    }
+                });
+            }
+
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    if (link.id !== 'sidebarLogoutButton') {
+                        closeSidebar();
+                        console.log(`Sidebar navigating to: ${link.getAttribute('href')}`);
+                    }
+                });
+            });
+
+            topNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    console.log(`Top nav navigating to: ${link.getAttribute('href')}`);
+                });
+            });
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768 && sidebarContainer && sidebarContainer.classList.contains('open')) {
+                    closeSidebar();
+                }
+            });
+
+            // Close top nav dropdown if clicked outside
+            document.addEventListener('click', (event) => {
+                const userAvatarContainer = document.getElementById('userAvatarContainer');
+                const userDropdownMenu = document.getElementById('userDropdownMenu');
+                if (userAvatarContainer && userDropdownMenu && !userAvatarContainer.contains(event.target) && !userDropdownMenu.contains(event.target)) {
+                    userDropdownMenu.classList.remove('show');
+                }
+            });
+
+            // --- QUIZ LOGIC (moved inside DOMContentLoaded) ---
+            let currentQuestionIndex = 0;
+            let timeLeft = 900; // 15 minutes in seconds
+            let timerInterval;
+            let userAnswers = [];
+
+            const originalQuestions = [
+                {
+                    question: "What is the goal of promoting composting under RA 9003?",
+                    options: [
+                        "A. To burn organic waste",
+                        "B. To reduce organic waste in landfills",
+                        "C. To sell waste overseas",
+                        "D. To increase garbage collection"
+                    ],
+                    answer: "B. To reduce organic waste in landfills"
+                },
+                {
+                    question: "What is one key purpose of Republic Act No. 9003?",
+                    options: [
+                        "A. Encourage illegal dumping",
+                        "B. Promote incineration",
+                        "C. Mandate solid waste management programs",
+                        "D. Increase landfill usage"
+                    ],
+                    answer: "C. Mandate solid waste management programs"
+                },
+                {
+                    question: "What does proper hazardous waste disposal prevent?",
+                    options: [
+                        "A. Soil enrichment",
+                        "B. Health risks from toxic exposure",
+                        "C. Recycling of toxic materials",
+                        "D. Water purification"
+                    ],
+                    answer: "B. Health risks from toxic exposure"
+                },
+                {
+                    question: "What type of waste is typically biodegradable?",
+                    options: [
+                        "A. Plastic bottles",
+                        "B. Aluminum cans",
+                        "C. Food scraps",
+                        "D. Glass jars"
+                    ],
+                    answer: "C. Food scraps"
+                },
+                {
+                    question: "What is the purpose of waste classification?",
+                    options: [
+                        "A. To increase landfill size",
+                        "B. To make waste collection slower",
+                        "C. To determine the best way to handle waste",
+                        "D. To avoid separating waste"
+                    ],
+                    answer: "C. To determine the best way to handle waste"
+                },
+                {
+                    question: "Which of the following is a sustainable waste management practice?",
+                    options: [
+                        "A. Dumping into rivers",
+                        "B. Incineration",
+                        "C. Recycling",
+                        "D. Burning plastics"
+                    ],
+                    answer: "C. Recycling"
+                },
+                {
+                    question: "What is waste segregation?",
+                    options: [
+                        "A. Mixing all types of waste into one bin",
+                        "B. Burning all types of waste",
+                        "C. Separating waste based on type, composition, or recyclability",
+                        "D. Throwing away waste without classification"
+                    ],
+                    answer: "C. Separating waste based on type, composition, or recyclability"
+                },
+                {
+                    question: "Which item is classified as recyclable?",
+                    options: [
+                        "A. Glass bottle",
+                        "B. Disposable gloves",
+                        "C. Worn-out rug",
+                        "D. Garden waste"
+                    ],
+                    answer: "A. Glass bottle"
+                },
+                {
+                    question: "What does compostable waste primarily consist of?",
+                    options: [
+                        "A. Plastics and metals",
+                        "B. Garden and food waste",
+                        "C. Batteries and paint",
+                        "D. Used syringes"
+                    ],
+                    answer: "B. Garden and food waste"
+                },
+                {
+                    question: "What is a direct benefit of efficient waste management?",
+                    options: [
+                        "A. More waste is created",
+                        "B. Higher landfill dependency",
+                        "C. Increased collection costs",
+                        "D. Streamlined collection and processing"
+                    ],
+                    answer: "D. Streamlined collection and processing"
+                }
+            ];
+
+            let questions = [];
+
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+            async function fetchRephrasedQuestion(originalQuestionObj) {
+                const prompt = `Rephrase the following multiple-choice question and its options. Provide the correct answer text separately. Ensure the meaning of the question and the correct answer remains the same.
+                \nOriginal Question: ${originalQuestionObj.question}
+                \nOriginal Options (without A,B,C,D prefixes):
+                ${originalQuestionObj.options.map(o => o.substring(3)).join('\n')}
+                \nOriginal Correct Answer Text (without prefix): ${originalQuestionObj.answer.substring(3)}
+                \nProvide the response in JSON format with 'rephrasedQuestion' (string), 'rephrasedOptions' (array of strings, no A,B,C,D prefixes), and 'correctAnswerText' (string, the plain text of the correct option).`;
+
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = {
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                "rephrasedQuestion": { "type": "STRING" },
+                                "rephrasedOptions": {
+                                    "type": "ARRAY",
+                                    "items": { "type": "STRING" }
+                                },
+                                "correctAnswerText": { "type": "STRING" }
+                            },
+                            "required": ["rephrasedQuestion", "rephrasedOptions", "correctAnswerText"]
+                        }
+                    }
+                };
+                // Replace with your actual Gemini API Key
+                // You should never expose your API key directly in client-side code in a production environment.
+                // For learning/testing, it's ok, but for production, use a backend proxy.
+                const apiKey = "YOUR_GEMINI_API_KEY";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const jsonString = result.candidates[0].content.parts[0].text;
+                        const parsedJson = JSON.parse(jsonString);
+
+                        let newOptions = parsedJson.rephrasedOptions;
+                        shuffleArray(newOptions);
+
+                        const prefixedOptions = newOptions.map((option, idx) => {
+                            return String.fromCharCode(65 + idx) + ". " + option;
+                        });
+
+                        let newCorrectAnswer = "";
+                        const correctText = parsedJson.correctAnswerText;
+                        for (let i = 0; i < prefixedOptions.length; i++) {
+                            if (prefixedOptions[i].substring(3).trim() === correctText.trim()) {
+                                newCorrectAnswer = prefixedOptions[i];
+                                break;
+                            }
+                        }
+
+                        return {
+                            question: parsedJson.rephrasedQuestion,
+                            options: prefixedOptions,
+                            answer: newCorrectAnswer || originalQuestionObj.answer
+                        };
+
+                    } else {
+                        console.error("LLM response structure unexpected or empty:", result);
+                        return originalQuestionObj;
+                    }
+                } catch (error) {
+                    console.error("Error fetching rephrased question:", error);
+                    return originalQuestionObj;
+                }
+            }
+
+            function startTimer(duration, display) {
+                let timer = duration, minutes, seconds;
+                timerInterval = setInterval(function () {
+                    minutes = parseInt(timer / 60, 10);
+                    seconds = parseInt(timer % 60, 10);
+
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                    display.textContent = "Time: " + minutes + ":" + seconds;
+                    timeLeft = timer;
+
+                    if (--timer < 0) {
+                        timer = 0;
+                        clearInterval(timerInterval);
+                        window.showModal("Time is up! Quiz ended.", showResults);
+                    }
+                }, 1000);
+            }
+
+            function selectOption(optionElement) {
+                const options = document.querySelectorAll('.option');
+                options.forEach(option => option.classList.remove('selected'));
+                optionElement.classList.add('selected');
+            }
+
+            async function nextQuestion() {
+                const selectedOption = document.querySelector('.option.selected');
+                if (selectedOption) {
+                    userAnswers[currentQuestionIndex] = selectedOption.textContent;
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        await updateQuestion();
+                    } else {
+                        window.showModal("Quiz completed!", () => {
+                            clearInterval(timerInterval);
+                            showResults();
+                        });
+                    }
+                } else {
+                    window.showModal("Please select an option.");
+                }
+            }
+
+            async function updateQuestion() {
+                const questionText = document.getElementById('question-text');
+                const optionsElements = document.querySelectorAll('.options .option');
+                const itemNumber = document.querySelector('.item-number');
+
+                if (currentQuestionIndex < questions.length) {
+                    questionText.textContent = "";
+                    optionsElements.forEach(option => {
+                        option.textContent = "";
+                        option.classList.remove('selected');
+                    });
+                    itemNumber.textContent = `Item ${currentQuestionIndex + 1}`;
+
+                    const originalQuestion = originalQuestions[currentQuestionIndex]; // Use originalQuestions here
+                    const rephrasedData = await fetchRephrasedQuestion(originalQuestion);
+
+                    // Update the questions array with the rephrased data
+                    questions[currentQuestionIndex].question = rephrasedData.question;
+                    questions[currentQuestionIndex].options = rephrasedData.options;
+                    questions[currentQuestionIndex].answer = rephrasedData.answer;
+
+                    questionText.textContent = questions[currentQuestionIndex].question;
+                    optionsElements.forEach((option, index) => {
+                        option.textContent = questions[currentQuestionIndex].options[index];
+                    });
+                }
+            }
+
+            function showResults() {
+                let correctAnswers = 0;
+                questions.forEach((question, index) => {
+                    if (userAnswers[index] === question.answer) {
+                        correctAnswers++;
+                    }
+                });
+
+                const incorrectAnswers = questions.length - correctAnswers;
+                const timeTaken = 900 - timeLeft;
+                const percentageScore = questions.length > 0 ? ((correctAnswers / questions.length) * 100).toFixed(1) : 0;
+
+                const quizContainer = document.querySelector('.quiz-container');
+                if (quizContainer) {
+                    quizContainer.classList.add('results-view');
+
+                    quizContainer.innerHTML = `
+                        <div class="results-container">
+                            <div class="chart-section">
+                                <div class="chart-container">
+                                    <canvas id="resultsChart"></canvas>
+                                </div>
+                                <div class="chart-info">
+                                    <div class="chart-title">Score Breakdown</div>
+                                    <p>Time: ${Math.floor(timeTaken / 60)} minutes ${timeTaken % 60} seconds</p>
+                                    <p>Score: ${correctAnswers} out of ${questions.length} (${percentageScore}%)</p>
+                                    <button class="retake-quiz-button" onclick="retakeQuiz()">Retake Quiz</button>
+                                </div>
+                            </div>
+                            <div class="results-list">
+                                <h2>Detailed Answers</h2>
+                                ${questions.map((question, index) => {
+                                    const isCorrect = userAnswers[index] === question.answer;
+                                    return `
+                                        <div class="${isCorrect ? 'correct' : 'incorrect'}">
+                                            <p><strong>Question ${index + 1}:</strong> ${question.question}</p>
+                                            <p><strong>Your Choice:</strong> ${userAnswers[index] || 'Not answered'}</p>
+                                            <p><strong>Correct Answer:</strong> ${question.answer}</p>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
+
+                    // Chart.js is already loaded in the head, so we can directly call createChart
+                    createChart(correctAnswers, incorrectAnswers);
+                }
+            }
+
+            function createChart(correctAnswers, incorrectAnswers) {
+                const ctx = document.getElementById('resultsChart');
+                if (ctx) {
+                    // Destroy existing chart instance if it exists before creating a new one
+                    if (Chart.getChart(ctx)) {
+                        Chart.getChart(ctx).destroy();
+                    }
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: ['Correct', 'Incorrect'],
+                            datasets: [{
+                                data: [correctAnswers, incorrectAnswers],
+                                backgroundColor: ['#4CAF50', '#FF6384'],
+                                hoverBackgroundColor: ['#66BB6A', '#FF9F40']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            let label = context.label || '';
+                                            if (label) {
+                                                label += ': ';
+                                            }
+                                            if (context.parsed !== null) {
+                                                label += context.parsed;
+                                            }
+                                            return label;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+
+            function retakeQuiz() {
+                currentQuestionIndex = 0;
+                timeLeft = 900;
+                userAnswers = [];
+                clearInterval(timerInterval);
+
+                const quizContainer = document.querySelector('.quiz-container');
+                if (quizContainer) {
+                    quizContainer.classList.remove('results-view');
+                    // Restore initial quiz HTML structure or redirect to quiz page
+                    quizContainer.innerHTML = `
+                        <div class="question-header">
+                            <div class="item-number">Item 1</div>
+                            <div class="time" id="time">Time: 15:00</div>
+                        </div>
+                        <div class="question">
+                            <p id="question-text">Loading question...</p>
+                        </div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this)">Loading option 1...</div>
+                            <div class="option" onclick="selectOption(this)">Loading option 2...</div>
+                            <div class="option" onclick="selectOption(this)">Loading option 3...</div>
+                            <div class="option" onclick="selectOption(this)">Loading option 4...</div>
+                        </div>
+                        <div class="navigation">
+                            <button class="submit-button" onclick="nextQuestion()">Submit Answer</button>
+                        </div>
+                    `;
+                }
+
+                initializeQuiz();
+            }
+
+            function initializeQuiz() {
+                // Make a copy of originalQuestions to shuffle for each quiz instance
+                questions = [...originalQuestions];
+                shuffleArray(questions);
+                questions.forEach(q => shuffleArray(q.options)); // Shuffle options for each question
+
+                updateQuestion();
+                const display = document.getElementById('time');
+                startTimer(timeLeft, display);
+
+                // Make selectOption and nextQuestion globally accessible for onclick attributes
+                window.selectOption = selectOption;
+                window.nextQuestion = nextQuestion;
+                window.retakeQuiz = retakeQuiz;
+            }
+
+            // Initialize the quiz only after DOM is ready
+            initializeQuiz();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/cssquizhomepage.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <!-- Hamburger icon is now present and always visible for desktop -->
+            <button class="hamburger-icon" id="hamburger-icon">☰</button>
+            <div class="logo">
+                <span class="logo-icon">
+                    <img src="https://i.ibb.co/8gNQ5CpH/logo.png" alt="Leaf Icon">
+                </span>
+                ECOMIND
+            </div>
+        </div>
+        <nav class="top-nav-links">
+            <a href="homepage.html">Home</a>
+            <a href="modulehomepage.html">Module</a>
+            <a href="gamehomepage.html">Game</a>
+            <div id="login-status-container">
+            <a href="login.html" class="login-button" id="loginLink">Login</a>
+            <div id="userAvatarContainer" class="user-avatar-container hidden">
+                <img id="userAvatarImg" src="https://static.vecteezy.com/system/resources/thumbnails/019/879/186/small/user-icon-on-transparent-background-free-png.png" alt="User Avatar">
+                <div class="profile-dropdown-content" id="userDropdownMenu"> 
+                    <a href="profile.html" id="profileLinkDropdown">My Profile</a>
+                    <a href="#" id="logoutButton">Logout</a>        
+                </div>
+            </div>
+        </div>        
+    </nav>
+    </header>
+
+    <div class="sidebar-container" id="sidebar-container">
+        <aside class="sidebar-menu" id="sidebar-menu">
+            <button class="close-sidebar-btn" id="close-sidebar-btn">&times;</button>
+            <ul class="sidebar-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="modulehomepage.html">Modules</a></li>
+                <li><a href="finalhomepage.html" class="active">Final Assessment</a></li>
+            </ul>
+        </aside>
+    </div>
+
+    <section class="hero">
+        <div class="hero-image">
+            <img src="https://i.ibb.co/ccxSYT9J/Person-Recycling-Product-Image.png" alt="Hero Image">
+        </div>
+        <div class="hero-content">
+            <h1>Module 1 Quiz</h1>
+            <p>Sustainable Development Goals</p>
+            <p>Test your knowledge from Module 1 through an interactive trial assessment.</p>
+            <p>Accelerate your understanding of proper waste segregation.</p>
+        </div>
+    </section>
+
+    <div class="assessment-container">
+    <div class="instruction-box">
+        <h2>Instruction:</h2>
+        <p>This assessment is designed to test your comprehensive understanding of sustainable development goals and proper waste segregation practices covered in all modules. This is a multiple choice quiz, carefully select the best possible answer. You have a limited time to complete the assessment, so manage your time wisely. Ensure you submit your responses before the timer runs out. Good luck!</p>
+    </div>
+
+    <div class="items-time-container">
+        <div class="items-box">
+            <p>Items: 20 </p>
+        </div>
+        <div class="time-box">
+            <p>Time: 15 minutes </p>
+        </div>
+    </div>
+
+    <div class="start-button-container">
+        <a href="quizpageM1.html" class="start-button">Start</a>
+    </div>
+</div>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-column">
+                <h3>ECOMIND</h3>
+                <div class="footer-social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="#"><i class="fab fa-facebook-f"></i> Facebook</a>
+                    <a href="#"><i class="fab fa-pinterest"></i> Pinterest</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>About Us</h3>
+                <ul>
+                    <li><a href="#">About Ecomind</a></li>
+                    <li><a href="#">Vision & Mission</a></li>
+                    <li><a href="#">Partnership</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li>1-800-555-5555</li>
+                    <li><a href="#">Join us</a></li>
+                    <li><a href="#">Email us</a></li>
+                    <li><a href="#">Customer Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Learning</h3>
+                <ul>
+                    <li><a href="#">Modules</a></li>
+                    <li><a href="#">Quizzes</a></li>
+                    <li><a href="#">Games</a></li>
+                    <li><a href="#">Volunteers</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2025 EcoMind</span>
+            <a href="#">EcoMind Policies</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">About us</a>
+        </div>
+    </footer>
+<script>
+     window.__firebase_config = JSON.stringify({
+            apiKey: "AIzaSyCXhfb3vyz3uWd-4p3t4UudLPzT-PD9JtE",
+            authDomain: "ecomind-164ad.firebaseapp.com",
+            projectId: "ecomind-164ad",
+            storageBucket: "ecomind-164ad.firebasestorage.app",
+            messagingSenderId: "342215046607",
+            appId: "1:342215046607:web:3b7465bc2a846acb000eba"
+        });
+        window.__app_id = "1:342215046607:web:3b7465bc2a846acb000eba";
+</script>
+<script type="module">
+ // This inline script remains in the <head> or at the top of your body
+    // to ensure Firebase config is available before the main module script runs.
+    window.__firebase_config = JSON.stringify({
+        apiKey: "AIzaSyCXhfb3vyz3uWd-4p3t4UudLPzT-PD9JtE",
+        authDomain: "ecomind-164ad.firebaseapp.com",
+        projectId: "ecomind-164ad",
+        storageBucket: "ecomind-164ad.firebasestorage.app",
+        messagingSenderId: "342215046607",
+        appId: "1:342215046607:web:3b7465bc2a846acb000eba"
+    });
+    window.__app_id = "1:342215046607:web:3b7465bc2a846acb000eba";
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Global Firebase variables
+    let app;
+    let auth;
+    let db;
+    let currentUserId = null;
+    let isAuthReady = false; // Flag to indicate if Firebase auth state has been initially checked
+
+    // --- Firebase Initialization & Authentication State Management ---
+    try {
+        let firebaseConfig = {};
+        let appId = 'default-app-id'; // Fallback, primarily overridden by window.__app_id
+
+        if (typeof window.__firebase_config !== 'undefined' && window.__firebase_config) {
+            try {
+                firebaseConfig = JSON.parse(window.__firebase_config);
+                console.log("Parsed firebaseConfig from global window.");
+            } catch (parseError) {
+                console.error("Error parsing __firebase_config:", parseError);
+                window.showModal("Firebase configuration parsing error. Please check the Canvas environment settings.");
+                throw new Error("Firebase config parsing failed.");
+            }
+        } else {
+            console.warn("__firebase_config is undefined or empty. Firebase will not be initialized with proper config.");
+            window.showModal("Firebase configuration is missing. Please ensure your Canvas environment provides it.");
+            throw new Error("Firebase config missing.");
+        }
+
+        if (typeof window.__app_id !== 'undefined' && window.__app_id) {
+            appId = window.__app_id;
+            console.log("App ID from global window:", appId);
+        } else {
+            console.warn("__app_id is undefined or empty. Using default-app-id.");
+        }
+
+       if (Object.keys(firebaseConfig).length > 0) {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            console.log("Firebase initialized successfully. App, Auth, and DB instances created.");
+
+            // Listen for authentication state changes
+            onAuthStateChanged(auth, async (user) => {
+                console.log("Auth state changed. User:", user ? user.uid : "null");
+
+                // Get references to all relevant UI elements for TOP NAV
+                const loginLink = document.getElementById('loginLink');
+                const userAvatarContainer = document.getElementById('userAvatarContainer');
+                const userAvatarImg = document.getElementById('userAvatarImg');
+                const userDropdownMenu = document.getElementById('userDropdownMenu');
+                const logoutButton = document.getElementById('logoutButton');
+                const profileLinkDropdown = document.getElementById('profileLinkDropdown');
+
+                // Get references to all relevant UI elements for SIDEBAR
+                const sidebarLoginListItem = document.getElementById('sidebarLoginListItem');
+                const sidebarUserAvatarListItem = document.getElementById('sidebarUserAvatarListItem');
+                const sidebarUserAvatarImg = document.getElementById('sidebarUserAvatarImg');
+                const sidebarLogoutButton = document.getElementById('sidebarLogoutButton');
+                const sidebarProfileLinkDropdown = document.getElementById('sidebarProfileLinkDropdown');
+
+                 if (user) {
+                    // User is signed in
+                    currentUserId = user.uid;
+                    const userIdDisplay = document.getElementById('userIdDisplay'); // Assuming this exists for debugging
+                    if (userIdDisplay) userIdDisplay.textContent = `User ID: ${currentUserId}`;
+
+                    // --- Top Navigation UI Update (Logged In) ---
+                    if (loginLink) loginLink.classList.add('hidden');
+                    if (userAvatarContainer) {
+                        userAvatarContainer.classList.remove('hidden');
+                        if (userAvatarImg) {
+                            userAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
+                            userAvatarImg.alt = user.displayName || 'User Avatar';
+                        }
+                        userAvatarContainer.onclick = toggleUserDropdown;
+                    }
+                    if (logoutButton) logoutButton.onclick = handleLogout;
+                    if (profileLinkDropdown) profileLinkDropdown.href = `profile.html?uid=${user.uid}`;
+
+                    // --- Sidebar Navigation UI Update (Logged In) ---
+                    if (sidebarLoginListItem) sidebarLoginListItem.classList.add('hidden');
+                    if (sidebarUserAvatarListItem) {
+                        sidebarUserAvatarListItem.classList.remove('hidden');
+                        if (sidebarUserAvatarImg) {
+                            sidebarUserAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
+                            sidebarUserAvatarImg.alt = user.displayName || 'User Avatar';
+                        }
+                    }
+                    if (sidebarLogoutButton) sidebarLogoutButton.onclick = handleLogout;
+                    if (sidebarProfileLinkDropdown) sidebarProfileLinkDropdown.href = `profile.html?uid=${user.uid}`;
+
+                    // --- Firestore User Profile Management ---
+                    const userProfileRef = doc(db, `artifacts/${appId}/users/${currentUserId}/user_profiles`, currentUserId);
+                    try {
+                        const userProfileSnap = await getDoc(userProfileRef);
+                        if (!userProfileSnap.exists()) {
+                            await setDoc(userProfileRef, {
+                                email: user.email || null,
+                                displayName: user.displayName || null,
+                                photoURL: user.photoURL || null,
+                                role: user.isAnonymous ? 'anonymous' : 'standard',
+                                registrationDate: new Date().toISOString(),
+                            }, { merge: true });
+                            console.log("Created new user profile for:", currentUserId);
+                        }
+                        await setDoc(userProfileRef, {
+                            lastLogin: new Date().toISOString()
+                        }, { merge: true });
+                        console.log("Last login updated for user:", currentUserId);
+                    } catch (error) {
+                        console.error("Error ensuring/updating user profile in Firestore:", error);
+                        window.showModal('Error updating user profile: ' + error.message);
+                    }
+
+                } else {
+                    // User is signed out
+                    currentUserId = null;
+                    const userIdDisplay = document.getElementById('userIdDisplay');
+                    if (userIdDisplay) userIdDisplay.textContent = 'Not logged in';
+
+                    // --- Top Navigation UI Update (Logged Out) ---
+                    if (loginLink) {
+                        loginLink.classList.remove('hidden');
+                        loginLink.textContent = 'Login';
+                        loginLink.href = 'login.html';
+                        loginLink.onclick = null;
+                    }
+                    if (userAvatarContainer) userAvatarContainer.classList.add('hidden');
+                    if (userDropdownMenu) userDropdownMenu.classList.remove('show');
+
+                    // --- Sidebar Navigation UI Update (Logged Out) ---
+                    if (sidebarLoginListItem) {
+                        sidebarLoginListItem.classList.remove('hidden');
+                        const sidebarLoginLink = document.getElementById('sidebarLoginLink');
+                        if (sidebarLoginLink) {
+                            sidebarLoginLink.textContent = 'Login';
+                            sidebarLoginLink.href = 'login.html';
+                            sidebarLoginLink.onclick = null;
+                        }
+                    }
+                    if (sidebarUserAvatarListItem) sidebarUserAvatarListItem.classList.add('hidden');
+                }
+                isAuthReady = true;
+                console.log("Firebase Auth state initial check complete (isAuthReady = true).");
+            });
+        } else {
+            console.error("Firebase config is empty after parsing. Firebase will not be initialized.");
+            const userIdDisplay = document.getElementById('userIdDisplay');
+            if (userIdDisplay) userIdDisplay.textContent = 'Firebase not initialized (config empty)';
+            window.showModal("Firebase configuration is empty. Please ensure your Canvas environment provides a valid config.");
+        }
+    } catch (e) {
+        console.error("Critical error during Firebase setup:", e);
+        window.showModal('A critical error occurred during Firebase setup: ' + e.message + '. Check console for details.');
+        const userIdDisplay = document.getElementById('userIdDisplay');
+        if (userIdDisplay) userIdDisplay.textContent = 'Firebase critical error';
+    }
+
+    // --- Logout Function ---
+    async function handleLogout(e) {
+        e.preventDefault();
+        console.log("Logout button clicked.");
+
+        if (!auth) {
+            window.showModal('Firebase Auth is not initialized. Cannot log out.');
+            return;
+        }
+        try {
+            await signOut(auth);
+            localStorage.removeItem('token');
+            window.showModal('You have been logged out.', () => {
+                window.location.href = 'login.html';
+            });
+        } catch (error) {
+            console.error("Error during logout:", error);
+            window.showModal('Logout failed: ' + error.message);
+        }
+    }
+
+    // --- User Avatar Dropdown Toggle (for Top Nav) ---
+    function toggleUserDropdown() {
+        const userDropdownMenu = document.getElementById('userDropdownMenu');
+        if (userDropdownMenu) {
+            userDropdownMenu.classList.toggle('show');
+        }
+    }
+
+    // --- Close dropdown if clicked outside ---
+    document.addEventListener('click', (event) => {
+        const userAvatarContainer = document.getElementById('userAvatarContainer');
+        const userDropdownMenu = document.getElementById('userDropdownMenu');
+        if (userAvatarContainer && userDropdownMenu && !userAvatarContainer.contains(event.target) && !userDropdownMenu.contains(event.target)) {
+            userDropdownMenu.classList.remove('show');
+        }
+    });
+document.addEventListener('DOMContentLoaded'), () => {
+        console.log("DOMContentLoaded event fired.");
+
+}
+
+        // Set the current year in the footer
+        const yearSpan = document.getElementById('year');
+        if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear();
+        }
+        
+</script>
+</body>
+</html>
