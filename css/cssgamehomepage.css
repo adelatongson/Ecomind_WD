@@ -1,0 +1,579 @@
+
+    /*
+    ------------------------------------------
+    GLOBAL & RESET STYLES (Combined from both projects)
+    ------------------------------------------
+    */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f0fdf4; /* From new UI components */
+      display: flex; /* From existing project */
+      flex-direction: column; /* From existing project */
+      min-height: 100vh; /* From existing project */
+      overflow-x: hidden; /* From existing project */
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /*
+    ------------------------------------------
+    HEADER STYLES (Updated to new UI components, with fixed position maintained)
+    ------------------------------------------
+    */
+    .header {
+            background-color: #fff;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0; /* Prevents header from shrinking */
+            position: fixed; /* Fixed position at the top */
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 50; /* Ensure header is above other content */
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            padding-left: 5px; /* Added padding to give some space on the left edge */
+            gap: 10px; /* Space between logo and ECOMIND text */
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            gap: 10px; /* Space between logo icon and ECOMIND text */
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Hamburger icon styles - now always visible for desktop layout */
+        .hamburger-icon {
+            background: none;
+            border: none;
+            font-size: 28px; /* Made slightly larger for visibility */
+            cursor: pointer;
+            color: #333;
+            padding: 5px;
+            display: block; /* Always displayed for desktop-only design */
+            flex-shrink: 0;
+            line-height: 1; /* Ensures text is vertically centered without extra spacing */
+            align-self: center; /* Vertically align in flex container */
+        }
+
+        .top-nav-links {
+            display: flex; /* Always displayed for desktop-only design */
+            gap: 25px;
+            align-items: center;
+        }
+
+        .top-nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 8px 12px;
+            transition: color 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .top-nav-links a:hover {
+            color: #4CAF50;
+            background-color: #e6f7e6;
+        }
+
+        .top-nav-links .login-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .top-nav-links .login-btn:hover {
+            background-color: #45a049;
+            color: #fff;
+        }
+
+      #login-status-container {
+            position: relative; /* Needed for absolute positioning of dropdown */
+            display: flex; /* To align avatar if needed */
+            align-items: center;
+        }
+
+        .user-avatar {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .user-avatar img {
+            width: 40px; /* Adjust as needed */
+            height: 40px; /* Adjust as needed */
+            border-radius: 50%; /* Makes it round */
+            object-fit: cover;
+            margin-left: 10px; /* Spacing from other nav items */
+            border: 2px solid #ccc; /* Optional: adds a border around the avatar */
+        }
+.hidden {
+    display: none !important; /* Use !important to ensure it overrides other styles if needed */
+}
+        /* Styles for the dropdown content */
+        .profile-dropdown-content {
+            display: none; /* Hidden by default */
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 100; /* Ensure it's above other content */
+            right: 0; /* Align to the right of the avatar */
+            top: calc(100% + 5px); /* Position below the avatar with a small gap */
+            border-radius: 5px;
+            overflow: hidden; /* For rounded corners */
+        }
+
+        .profile-dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        .profile-dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        /* Show the dropdown when the 'show' class is added */
+        .profile-dropdown-content.show {
+            display: block;
+        }
+
+        /* Style the login button if it's placed directly in the header */
+        .header .login-button {
+            background-color: #4CAF50; /* Example green */
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none; /* If it's a link styled as button */
+            display: inline-block; /* Ensure padding works */
+        }
+
+        .header .login-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Basic Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1001; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be adjusted */
+            max-width: 500px; /* Max width for larger screens */
+            border-radius: 8px;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #modalMessage {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        #modalOkButton {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        #modalOkButton:hover {
+            background-color: #4cae4c;
+        }
+
+        /* --- SIDEBAR STYLES --- */
+        .sidebar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-container.open {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .sidebar-menu {
+            width: 280px;
+            height: 100%;
+            background-color: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-menu.open {
+            transform: translateX(0);
+        }
+
+        .close-sidebar-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #555;
+            align-self: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-links a {
+            display: block;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar-links a:hover {
+            background-color: #e6f7e6;
+            color: #4CAF50;
+        }
+
+        .sidebar-links a.active {
+            background-color: #d4edda;
+            color: #4CAF50;
+            font-weight: 700;
+        }
+
+        /* Login Button specific styles */
+        .top-nav-links .login-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .top-nav-links .login-btn:hover {
+            background-color: #45a049;
+            color: #fff; /* Keep text white on hover */
+        }
+    /*
+    ------------------------------------------
+    MAIN CONTENT STYLES (Hero & Eco-Challenge - From new UI components, retained as is)
+    ------------------------------------------
+    */
+    .hero {
+      background: url('../images/backgroundgame.png') no-repeat center center/cover;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      padding-top: 80px; /* Adjust for fixed header */
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 1rem;
+      padding: 1rem;
+      text-align: center;
+      width: 220px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card h3 {
+      color: #166534;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .card button {
+      padding: 0.5rem 1rem;
+      background-color: #16a34a;
+      border: none;
+      color: white;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .card button:hover {
+      background-color: #15803d;
+    }
+
+    .eco-challenge-section {
+  max-width: 1200px;
+  margin: 4rem auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 0 1rem;
+  background-color: white; /* Add this line to change the background color to white */
+}
+
+    .eco-challenge-section img {
+      max-width: 350px;
+    }
+
+    .eco-challenge-text {
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .eco-challenge-text h2 {
+      font-size: 2.5rem;
+      color: #166534;
+      margin-bottom: 1rem;
+    }
+
+    .eco-challenge-text p {
+      color: #444;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .eco-challenge-text button {
+      background-color: #16a34a;
+      color: white;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 9999px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .eco-challenge-text button:hover {
+      background-color: #15803d;
+    }
+
+    /*
+    ------------------------------------------
+    FOOTER STYLES (Updated to new UI components)
+    ------------------------------------------
+    */
+    .footer {
+    background-color: #4F6D44;
+    color: #fff;
+    padding: 60px 0 30px;
+    position: relative;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding-top: 0;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+    color: #fff;
+    text-align: center; /* Centered text within each column */
+}
+
+.footer-column h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 10px;
+}
+
+.footer-column ul li a, .footer-column ul li {
+    text-decoration: none;
+    color: #eee;
+    transition: color 0.3s ease;
+}
+
+.footer-column ul li a:hover {
+    color: #c9e4c9;
+}
+
+.footer-social-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    align-items: center; /* Centered social icons */
+}
+
+.footer-social-icons a {
+    color: #eee;
+    font-size: 16px;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-social-icons a:hover {
+    color: #fff;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    color: #aaa;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 20px;
+}
+.footer-bottom a {
+    text-decoration: none;
+    color: #aaa;
+    transition: color 0.3s ease;
+}
+.footer-bottom a:hover {
+    color: #fff;
+}
