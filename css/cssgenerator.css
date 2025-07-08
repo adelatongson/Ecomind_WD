@@ -1,0 +1,412 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f8f8;
+            display: flex; /* Use flexbox for main layout */
+            flex-direction: column; /* Stack header, main, and other content vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            overflow-x: hidden; /* Prevent horizontal scroll due to sidebar */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /*
+        ---
+        NAVIGATION BAR (HEADER) STYLES
+        ---
+        */
+        .header {
+            background-color: #fff;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0; /* Prevent header from shrinking */
+            width: 100%; /* Ensure header takes full width */
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Space between hamburger and logo */
+        }
+
+        /* Hamburger Menu Icon - Always visible */
+        .hamburger-icon {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+            padding: 5px;
+            display: block; /* Ensure it's always visible */
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+
+        .logo {
+            display: flex; /* Make logo itself a flex container */
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            gap: 10px; /* Space between logo icon and text */
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #4CAF50; /* Green background for circular icon */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures the image covers the circular area */
+        }
+
+        .top-nav-links {
+            display: flex; /* Always display top nav links */
+            gap: 25px;
+            align-items: center;
+        }
+
+        .top-nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 8px 12px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .top-nav-links a:hover {
+            color: #4CAF50; /* Green text on hover */
+            background-color: #e6f7e6; /* Light green background on hover */
+        }
+
+        /* Login Button specific styles */
+        .top-nav-links .login-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .top-nav-links .login-btn:hover {
+            background-color: #45a049;
+            color: #fff; /* Keep text white on hover */
+        }
+#login-status-container {
+            position: relative; /* Needed for absolute positioning of dropdown */
+            display: flex; /* To align avatar if needed */
+            align-items: center;
+        }
+
+        .user-avatar {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .user-avatar img {
+            width: 40px; /* Adjust as needed */
+            height: 40px; /* Adjust as needed */
+            border-radius: 50%; /* Makes it round */
+            object-fit: cover;
+            margin-left: 10px; /* Spacing from other nav items */
+            border: 2px solid #ccc; /* Optional: adds a border around the avatar */
+        }
+.hidden {
+    display: none !important; /* Use !important to ensure it overrides other styles if needed */
+}
+        /* Styles for the dropdown content */
+        .profile-dropdown-content {
+            display: none; /* Hidden by default */
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 100; /* Ensure it's above other content */
+            right: 0; /* Align to the right of the avatar */
+            top: calc(100% + 5px); /* Position below the avatar with a small gap */
+            border-radius: 5px;
+            overflow: hidden; /* For rounded corners */
+        }
+
+        .profile-dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        .profile-dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        /* Show the dropdown when the 'show' class is added */
+        .profile-dropdown-content.show {
+            display: block;
+        }
+
+        /* Style the login button if it's placed directly in the header */
+        .header .login-button {
+            background-color: #4CAF50; /* Example green */
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none; /* If it's a link styled as button */
+            display: inline-block; /* Ensure padding works */
+        }
+
+        .header .login-button:hover {
+            background-color: #45a049;
+        }
+
+        /*
+        ---
+        SIDEBAR STYLES
+        ---
+        */
+        /* Sliding Sidebar Container (Overlay) */
+        .sidebar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+            visibility: hidden; /* Hidden by default */
+            opacity: 0; /* Fade in effect */
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1000; /* Ensures it's on top of everything */
+        }
+
+        .sidebar-container.open {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Actual Sliding Sidebar Menu */
+        .sidebar-menu {
+            width: 280px; /* Default width */
+            height: 100%;
+            background-color: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translateX(-100%); /* Initially off-screen to the left */
+            transition: transform 0.3s ease; /* Smooth slide transition */
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            padding: 20px;
+            box-sizing: border-box; /* Include padding in width */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-menu.open {
+            transform: translateX(0); /* Slide into view */
+        }
+
+        .close-sidebar-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #555;
+            align-self: flex-end; /* Pushes button to the right */
+            margin-bottom: 20px;
+        }
+
+        .sidebar-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-links a {
+            display: block;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 12px 15px;
+            border-radius: 8px; /* Rounded corners */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar-links a:hover {
+            background-color: #e6f7e6; /* Light green background on hover */
+            color: #4CAF50; /* Green text on hover */
+        }
+
+        .sidebar-links a.active {
+            background-color: #d4edda; /* Active link background */
+            color: #4CAF50; /* Active link text color */
+            font-weight: 700;
+        }
+
+        /*
+        ---
+        FOOTER STYLES (Non-Responsive)
+        ---
+        */
+        .footer {
+            background-color: #4F6D44; /* Dark green */
+            color: #fff;
+            padding: 60px 0 30px;
+            position: relative;
+            margin-top: auto; /* Pushes footer to the bottom */
+            flex-shrink: 0; /* Prevents footer from shrinking */
+        }
+
+        .footer-content {
+            display: flex; /* Keep flex display for columns */
+            justify-content: center;
+            flex-wrap: wrap; /* Allows columns to wrap if space is tight, but won't force a stacked layout */
+            gap: 30px;
+            padding-top: 0;
+            max-width: 1200px; /* Constrain content width */
+            margin: 0 auto; /* Center content */
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px; /* Minimum width for columns */
+            color: #fff;
+            text-align: center; /* Center text within columns */
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a, .footer-column ul li { /* Included li itself for consistent text color */
+            text-decoration: none;
+            color: #eee;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: #c9e4c9;
+        }
+
+        .footer-social-icons {
+            display: flex;
+            flex-direction: column; /* Social icons remain stacked vertically */
+            gap: 10px;
+            margin-top: 10px;
+            align-items: center; /* Center icons */
+        }
+
+        .footer-social-icons a {
+            color: #eee;
+            font-size: 16px;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-social-icons a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            color: #aaa;
+            display: flex; /* Keep flex display for bottom links */
+            justify-content: center;
+            flex-wrap: wrap; /* Allow wrapping if needed */
+            gap: 20px;
+        }
+        .footer-bottom a {
+            text-decoration: none;
+            color: #aaa;
+            transition: color 0.3s ease;
+        }
+        .footer-bottom a:hover {
+            color: #fff;
+        }
+
+body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .generator {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .generator input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .generator button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .generator button:hover {
+            background-color: #45a049;
+        }
