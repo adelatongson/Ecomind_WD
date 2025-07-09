@@ -3,144 +3,964 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Profile - Nicole Fernandez</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>User Profile - EcoMind</title>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for social icons in footer (if needed, otherwise remove) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="css/cssprofile.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%; /* Ensure container takes full width on small screens */
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+            cursor: pointer;
+        }
+
+        /*
+        ---
+        HEADER STYLES
+        ---
+        */
+        .header {
+            background-color: #fff;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .hamburger-icon {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+            padding: 5px;
+            display: block;
+            flex-shrink: 0;
+            /* Ensure hamburger icon is visible on small screens */
+        }
+        @media (min-width: 769px) { /* Hide hamburger on larger screens */
+            .hamburger-icon {
+                display: none;
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d5016;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .top-nav-links {
+            display: none; /* Hidden by default for mobile */
+            gap: 25px;
+            align-items: center;
+        }
+        @media (min-width: 769px) { /* Show on larger screens */
+            .top-nav-links {
+                display: flex;
+            }
+        }
+
+        .top-nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 8px 12px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .top-nav-links a:hover {
+            color: #2d5016;
+            background-color: #e6f7e6;
+        }
+
+        .top-nav-links .login-btn {
+            background-color: #9ACD32;
+            color: #2d5016;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .top-nav-links .login-btn:hover {
+            background-color: #8FBC8F;
+            color: #2d5016;
+        }
+
+        #login-status-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            /* Hidden by default, shown by JS */
+            display: none;
+        }
+
+        .user-avatar-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-left: 10px;
+            border: 2px solid #ccc;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Styles for the dropdown content */
+        .profile-dropdown-content {
+            display: none; /* Hidden by default */
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 100;
+            right: 0;
+            top: calc(100% + 5px);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .profile-dropdown-content a,
+        .profile-dropdown-content button { /* Added button for logout */
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 100%; /* Ensure buttons take full width */
+            text-align: left;
+            white-space: nowrap;
+            background: none; /* Remove default button background */
+            border: none; /* Remove default button border */
+            cursor: pointer;
+        }
+
+        .profile-dropdown-content a:hover,
+        .profile-dropdown-content button:hover {
+            background-color: #ddd;
+        }
+
+        /* Show the dropdown when the 'show' class is added */
+        .profile-dropdown-content.show {
+            display: block;
+        }
+
+        /* Style the login button if it's placed directly in the header */
+        .header .login-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .header .login-button:hover {
+            background-color: #45a049;
+        }
+
+        /*
+        ---
+        SIDEBAR STYLES
+        ---
+        */
+        .sidebar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-container.open {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .sidebar-menu {
+            width: 280px;
+            height: 100%;
+            background-color: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-menu.open {
+            transform: translateX(0);
+        }
+
+        .close-sidebar-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #555;
+            align-self: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-links a,
+        .sidebar-links button { /* Added button for logout */
+            display: block;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background: none; /* Remove default button background */
+            border: none; /* Remove default button border */
+            cursor: pointer;
+            width: 100%; /* Ensure buttons take full width */
+            text-align: left;
+        }
+
+        .sidebar-links a:hover,
+        .sidebar-links button:hover {
+            background-color: #e6f7e6;
+            color: #2d5016;
+        }
+
+        .sidebar-links a.active {
+            background-color: #d4edda;
+            color: #2d5016;
+            font-weight: 700;
+        }
+
+        .sidebar-user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            background-color: #f0f0f0; /* Light gray background */
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .sidebar-user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ccc;
+        }
+
+        .sidebar-user-info span {
+            font-weight: 600;
+        }
+
+
+        /*
+        ---
+        MAIN CONTENT STYLES
+        ---
+        */
+        .main-content {
+            max-width: 1200px;
+            margin: 100px auto 40px; /* Adjust margin-top for fixed header */
+            padding: 0 20px;
+            flex-grow: 1;
+        }
+
+        .profile-section {
+            background-color: #E0C7A9; /* Light brown/tan */
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .profile-header-content { /* Renamed from profile-header to avoid conflict */
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            justify-content: flex-start;
+            padding-left: 50px; /* Adjust as needed */
+        }
+
+        .profile-image {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            border: 3px solid #ddd;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex; /* For centering initial letter */
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            font-weight: bold;
+            overflow: hidden;
+        }
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+        .return-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 35px;
+            height: 35px;
+            background-image: url('https://placehold.co/35x35/FFFFFF/000000?text=Back'); /* Placeholder for return.png */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .return-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        }
+
+        .profile-info h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            color: black;
+            font-weight: bold;
+        }
+
+        .profile-info p {
+            color: black;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 300px;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            width: 60%; /* This will be set by JS */
+            height: 100%;
+            background-color: #8BC34A; /* Light green */
+            border-radius: 10px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .progress-text {
+            position: absolute;
+            right: 10px;
+            top: 2px;
+            font-size: 12px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .section-title {
+            background-color: #C8E6C9; /* Lighter green */
+            color: black;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .submitted-files {
+            background-color: rgba(176, 204, 41, 0.25); /* Light green with transparency */
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .file-item {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            color: black;
+            font-weight: bold;
+            justify-content: space-between; /* Distribute items */
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-item > span:first-child { /* File Name */
+            flex-grow: 1; /* Allow name to take available space */
+            min-width: 150px; /* Ensure it doesn't shrink too much */
+        }
+
+        .file-item .file-buttons-container { /* Container for download/view buttons */
+            display: flex;
+            gap: 10px;
+            margin-top: 5px; /* Space from name on small screens */
+        }
+        @media (min-width: 600px) { /* Adjust for larger screens */
+            .file-item .file-buttons-container {
+                margin-top: 0;
+            }
+        }
+
+        .file-button {
+            background-color: #B0CC29; /* Greenish yellow */
+            color: black;
+            padding: 8px 16px;
+            border: none;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border-radius: 5px; /* Added for consistency */
+        }
+
+        .file-button:hover {
+            background-color: #9AB825;
+        }
+
+        .file-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .status-pending {
+            background-color: #FFF3C4;
+            color: #F57F17;
+        }
+
+        .status-approved {
+            background-color: #C8E6C9;
+            color: #2E7D32;
+        }
+
+        .status-submitted {
+            background-color: #E1F5FE;
+            color: #0277BD;
+        }
+
+        .quiz-results {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .quiz-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .quiz-table th {
+            background-color: #f8f8f8;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+            font-weight: bold;
+            color: black;
+        }
+
+        .quiz-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            color: black;
+            font-weight: bold;
+        }
+
+        .quiz-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Specific row background colors for quiz table */
+        .quiz-table tbody tr:nth-child(odd) { /* Apply to odd rows for the lighter shade */
+            background-color: rgba(176, 204, 41, 0.25);
+        }
+        .quiz-table tbody tr:nth-child(even) { /* Apply to even rows for the darker shade */
+            background-color: rgba(176, 204, 41, 0.5);
+        }
+
+
+        .score {
+            font-weight: bold;
+            color: black;
+        }
+
+        .view-btn {
+            width: 24px;
+            height: 24px;
+            background-image: url('https://placehold.co/24x24/FFFFFF/000000?text=💬'); /* Placeholder for comment.png */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            display: block; /* Ensure it's a block for width/height */
+            text-indent: -9999px; /* Hide text if using image */
+            overflow: hidden;
+        }
+
+        .view-btn:hover {
+            opacity: 0.7;
+        }
+
+        .teacher-remarks {
+            background-color: #C8E6C9; /* Lighter green */
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            min-height: 100px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Added shadow for consistency */
+        }
+
+        /*
+        ---
+        FOOTER STYLES
+        ---
+        */
+        .footer {
+            background-color: #4F6D44; /* Darker green */
+            color: #fff;
+            padding: 60px 0 30px;
+            position: relative;
+            margin-top: auto;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding-top: 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a, .footer-column ul li {
+            text-decoration: none;
+            color: #eee;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: #c9e4c9;
+        }
+
+        .footer-social-icons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+            align-items: center;
+        }
+
+        .footer-social-icons a {
+            color: #eee;
+            font-size: 16px;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none; /* Ensure links are not underlined */
+        }
+
+        .footer-social-icons a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            color: #aaa;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-bottom a {
+            text-decoration: none;
+            color: #aaa;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom a:hover {
+            color: #fff;
+        }
+
+        /*
+        ---
+        MODAL STYLES
+        ---
+        */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            display: flex; /* Use flex for centering */
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            text-align: center;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-ok-button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .modal-ok-button:hover {
+            background-color: #45a049;
+        }
+
+        /*
+        ---
+        RESPONSIVE STYLES
+        ---
+        */
+        @media (max-width: 768px) {
+            .profile-header-content {
+                flex-direction: column;
+                text-align: center;
+                padding-left: 0;
+                gap: 15px;
+            }
+
+            .main-content {
+                margin-top: 80px; /* Adjust for smaller header */
+                padding: 0 10px;
+            }
+
+            .header {
+                padding: 10px 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .logo img {
+                width: 25px;
+                height: 25px;
+            }
+
+            .file-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .file-item .file-buttons-container {
+                flex-direction: row;
+                width: 100%;
+                justify-content: center;
+            }
+            .file-item .file-status {
+                width: 100%;
+                text-align: center;
+                margin-left: 0;
+            }
+
+            .quiz-table th, .quiz-table td {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-column {
+                min-width: auto;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Header from second file with original logo -->
+    <!-- Header -->
     <header class="header">
         <div class="header-left">
             <button class="hamburger-icon" id="hamburger-icon">☰</button>
-            <a href="#home" class="logo">
-                <img src="images/logoecomind.svg" alt="EcoMind Logo">
+            <a href="modulehomepage.html" class="logo">
+                <!-- Placeholder for logoecomind.svg -->
+                <img src="https://placehold.co/30x30/4CAF50/FFFFFF?text=E" alt="EcoMind Logo">
                 EcoMind
             </a>
         </div>
         <nav class="top-nav-links">
-            <a href="#home">Home</a>
-            <a href="#module">Module</a>
-            <a href="#game">Game</a>
+            <a href="modulehomepage.html">Home</a>
+            <a href="modulehomepage.html">Module</a>
+            <a href="game.html">Game</a> <!-- Assuming a game.html exists -->
             <div id="login-status-container">
-            <a href="login.html" class="login-button" id="loginLink">Login</a>
-            <div id="userAvatarContainer" class="user-avatar-container hidden">
-                <img id="userAvatarImg" src="https://static.vecteezy.com/system/resources/thumbnails/019/879/186/small/user-icon-on-transparent-background-free-png.png" alt="User Avatar">
-                <div class="profile-dropdown-content" id="userDropdownMenu"> 
-                    <a href="profile.html" id="profileLinkDropdown">My Profile</a>
-                    <a href="#" id="logoutButton">Logout</a>
-</div>
+                <a href="login.html" class="login-button" id="loginLink">Login</a>
+                <div id="userAvatarContainer" class="user-avatar-container">
+                    <!-- Placeholder for user avatar image -->
+                    <img id="userAvatarImg" src="https://placehold.co/40x40/4CAF50/FFFFFF?text=U" alt="User Avatar">
+                    <div class="profile-dropdown-content" id="userDropdownMenu">
+                        <a href="profile.html" id="profileLinkDropdown">My Profile</a>
+                        <button id="logoutButton">Logout</button>
+                    </div>
+                </div>
             </div>
-        </div>
         </nav>
     </header>
 
-    <!-- Sidebar from second file -->
+    <!-- Sidebar -->
     <div class="sidebar-container" id="sidebar-container">
         <aside class="sidebar-menu" id="sidebar-menu">
             <button class="close-sidebar-btn" id="close-sidebar-btn">&times;</button>
             <ul class="sidebar-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#modules">Modules</a></li>
-                <li><a href="#final-assessment">Final Assessment</a></li>
-                <li><a href="#profile" class="active">Student Profile</a></li>
+                <li><a href="modulehomepage.html">Home</a></li>
+                <li><a href="modulehomepage.html">Modules</a></li>
+                <li><a href="final-assessment.html">Final Assessment</a></li> <!-- Assuming a final-assessment.html exists -->
+                <li><a href="profile.html" class="active">Student Profile</a></li>
+                <!-- Sidebar Login/Logout/Profile items (managed by JS) -->
+                <li id="sidebarLoginListItem" class="sidebar-list-item">
+                    <a href="login.html" id="sidebarLoginLink" class="sidebar-nav-link">Login</a>
+                </li>
+                <li id="sidebarUserAvatarListItem" class="sidebar-list-item sidebar-user-info">
+                    <img id="sidebarUserAvatarImg" class="sidebar-user-avatar-img" src="https://placehold.co/40x40/4CAF50/FFFFFF?text=U" alt="User Avatar">
+                    <span id="sidebarUserName">User Name</span>
+                </li>
+                <li id="sidebarProfileLinkDropdown" class="sidebar-list-item">
+                    <a href="profile.html" class="sidebar-nav-link">Profile</a>
+                </li>
+                <li id="sidebarLogoutListItem" class="sidebar-list-item">
+                    <button id="sidebarLogoutButton" class="sidebar-logout-button">Logout</button>
+                </li>
             </ul>
         </aside>
     </div>
 
-    <!-- Original main content -->
+    <!-- Main Content -->
     <main class="main-content">
-        <div class="profile-section">
-            <button class="return-button" onclick="returnToPrevious()" title="Return"></button>
-            <div class="profile-header">
-                <div class="profile-image"></div>
-                <div class="profile-info">
-                    <h1>Nicole L. Fernandez</h1>
-                    <p>Student ID or email</p>
-                    <p><strong>Progress Bar</strong></p>
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                        <div class="progress-text">60% Complete</div>
+        <div class="container">
+            <section class="profile-section">
+                <button onclick="returnToPrevious()" class="return-button"></button>
+                <div class="profile-header-content">
+                    <div id="profileImagePlaceholder" class="profile-image"></div>
+                    <div class="profile-info">
+                        <h1 id="profileName">Loading...</h1>
+                        <p id="profileEmail">Loading...</p>
+                        <div class="progress-bar">
+                            <div id="progressBarFill" class="progress-fill"></div>
+                            <span id="progressBarText" class="progress-text">0% Complete</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
 
-        <div class="submitted-files">
-            <h2 class="section-title">Submitted Files</h2>
-            <div class="file-item">
-                <span>Segregation Activity</span>
-                <button class="file-button" onclick="downloadFile()">Download</button>
-                <button class="file-button" onclick="viewFile()">View</button>
-                <span class="file-status status-submitted">Status: Submitted</span>
-            </div>
-        </div>
+            <section class="submitted-files">
+                <h2 class="section-title">Submitted Files</h2>
+                <div id="submittedFilesList">
+                    <p>Loading submitted files...</p>
+                    <!-- Submitted files will be loaded here by JavaScript -->
+                </div>
+            </section>
 
-        <div class="quiz-results">
-            <h2 class="section-title">Quiz Results</h2>
-            <table class="quiz-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Score</th>
-                        <th>Time Taken</th>
-                        <th>Date Taken</th>
-                        <th>Attempts</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Module 1:<br>Waste Types</td>
-                        <td class="score">100/100</td>
-                        <td>30.6 minutes</td>
-                        <td>17/05/2025</td>
-                        <td>3</td>
-                        <td><button class="view-btn" title="View Comments"></button></td>
-                    </tr>
-                    <tr>
-                        <td>Module 2:<br>Waste Types</td>
-                        <td class="score">100/100</td>
-                        <td>30.6 minutes</td>
-                        <td>17/05/2025</td>
-                        <td>3</td>
-                        <td><button class="view-btn" title="View Comments"></button></td>
-                    </tr>
-                    <tr>
-                        <td>Module 3:<br>Waste Types</td>
-                        <td class="score">100/100</td>
-                        <td>30.6 minutes</td>
-                        <td>17/05/2025</td>
-                        <td>3</td>
-                        <td><button class="view-btn" title="View Comments"></button></td>
-                    </tr>
-                    <tr>
-                        <td>Module 4:<br>Waste Types</td>
-                        <td class="score">100/100</td>
-                        <td>30.6 minutes</td>
-                        <td>17/05/2025</td>
-                        <td>3</td>
-                        <td><button class="view-btn" title="View Comments"></button></td>
-                    </tr>
-                    <tr>
-                        <td>Module 5:<br>Waste Types</td>
-                        <td class="score">100/100</td>
-                        <td>30.6 minutes</td>
-                        <td>17/05/2025</td>
-                        <td>3</td>
-                        <td><button class="view-btn" title="View Comments"></button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <section class="quiz-results">
+                <h2 class="section-title">Quiz Results</h2>
+                <div class="table-wrapper">
+                    <table class="quiz-table">
+                        <thead>
+                            <tr>
+                                <th>Module / Quiz</th>
+                                <th>Score</th>
+                                <th>Time Taken</th>
+                                <th>Date Taken</th>
+                                <th>Attempts</th>
+                                <th>Comments</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quizResultsTableBody">
+                            <tr><td colspan="6">Loading quiz results...</td></tr>
+                            <!-- Quiz results will be loaded here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-        <div class="teacher-remarks">
-            <h2 class="section-title">Teacher's Remarks</h2>
-            <!-- Teacher's remarks content would go here -->
+            <section class="teacher-remarks">
+                <h2 class="section-title">Teacher's Remarks</h2>
+                <div id="teacherRemarksContent">
+                    <p>Loading remarks...</p>
+                </div>
+            </section>
         </div>
     </main>
 
-    <!-- Footer from second file -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="container footer-content">
             <div class="footer-column">
@@ -188,550 +1008,584 @@
         </div>
     </footer>
 
-<script>
-    // This inline script remains in the <head> or at the top of your body
-    // to ensure Firebase config is available before the main module script runs.
-    window.__firebase_config = JSON.stringify({
-        apiKey: "AIzaSyCXhfb3vyz3uWd-4p3t4UudLPzT-PD9JtE",
-        authDomain: "ecomind-164ad.firebaseapp.com",
-        projectId: "ecomind-164ad",
-        storageBucket: "ecomind-164ad.firebasestorage.app",
-        messagingSenderId: "342215046607",
-        appId: "1:342215046607:web:3b7465bc2a846acb000eba"
-    });
-    window.__app_id = "1:342215046607:web:3b7465bc2a846acb000eba";
+    <!-- Modal Structure (for messages) -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="window.closeModal()">&times;</span>
+            <p id="modalMessage"></p>
+            <button onclick="window.closeModal()" class="modal-ok-button">
+                OK
+            </button>
+        </div>
+    </div>
 
-    // Modal Functionality (Added for better user feedback)
-    window.showModal = function(message, onConfirm = null) {
-        const modal = document.getElementById('myModal');
-        const modalMessage = document.getElementById('modalMessage');
-        const modalActionButton = document.getElementById('modalActionButton');
-        const closeButton = document.querySelector('.modal .close-button');
-
-        modalMessage.textContent = message;
-        modalActionButton.style.display = 'none'; // Hide by default
-
-        closeButton.onclick = function() {
-            modal.style.display = 'none';
-        }
-        modal.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
-
-        if (onConfirm) {
-            modalActionButton.style.display = 'block';
-            modalActionButton.textContent = 'OK';
-            modalActionButton.onclick = function() {
-                modal.style.display = 'none';
-                onConfirm();
-            };
-        } else {
-            // If no confirmation needed, make close button or modal click close it
-            closeButton.onclick = function() { modal.style.display = 'none'; };
-            modal.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = 'none';
-                }
-            };
-        }
-
-        modal.style.display = 'flex'; // Use flex to center
-    };
-</script>
+    <script>
+        // IMPORTANT: These variables are provided by the Canvas environment at runtime.
+        // DO NOT change these lines. They ensure your app connects to the correct Firebase project.
+        window.__firebase_config = JSON.stringify({
+            apiKey: "AIzaSyCXhfb3vyz3uWd-4p3t4UudLPzT-PD9JtE",
+            authDomain: "ecomind-164ad.firebaseapp.com",
+            projectId: "ecomind-164ad",
+            storageBucket: "ecomind-164ad.firebasestorage.app",
+            messagingSenderId: "342215046607",
+            appId: "1:342215046607:web:3b7465bc2a846acb000eba"
+        });
+        window.__app_id = "1:342215046607:web:3b7465bc2a846acb000eba";
+    </script>
     <script type="module">
-    // Firebase Imports
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-    import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js"; // Import storage
+        // Firebase Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-    // Global Firebase variables
-    let app;
-    let auth;
-    let db;
-    let storage; // Declare storage
-    let currentUserId = null;
-    let isAuthReady = false; // Flag to indicate if Firebase auth state has been initially checked
+        // Global Firebase variables
+        let app;
+        let auth;
+        let db;
+        let storage;
+        let currentUserId = null;
+        let isAuthReady = false;
+        let appId = 'default-app-id';
 
-    // --- Firebase Initialization & Authentication State Management ---
-    try {
-        let firebaseConfig = {};
-        let appId = 'default-app-id'; // Fallback, primarily overridden by window.__app_id
-
-        if (typeof window.__firebase_config !== 'undefined' && window.__firebase_config) {
+        // --- Firebase Initialization & Authentication State Management ---
+        async function initializeFirebase() {
             try {
-                firebaseConfig = JSON.parse(window.__firebase_config);
-                console.log("Parsed firebaseConfig from global window.");
-            } catch (parseError) {
-                console.error("Error parsing __firebase_config:", parseError);
-                window.showModal("Firebase configuration parsing error. Please check the Canvas environment settings.");
-                throw new Error("Firebase config parsing failed.");
+                let firebaseConfig = {};
+
+                if (typeof window.__firebase_config !== 'undefined' && window.__firebase_config) {
+                    try {
+                        firebaseConfig = JSON.parse(window.__firebase_config);
+                        console.log("Parsed firebaseConfig from global window.");
+                    } catch (parseError) {
+                        console.error("Error parsing __firebase_config:", parseError);
+                        window.showModal("Firebase configuration parsing error. Please check the Canvas environment settings.");
+                        return;
+                    }
+                } else {
+                    console.warn("__firebase_config is undefined or empty. Firebase will not be initialized with proper config.");
+                    window.showModal("Firebase configuration is missing. Please ensure your Canvas environment provides it.");
+                    return;
+                }
+
+                if (typeof window.__app_id !== 'undefined' && window.__app_id) {
+                    appId = window.__app_id;
+                    console.log("App ID from global window:", appId);
+                } else {
+                    console.warn("__app_id is undefined or empty. Using default-app-id.");
+                }
+
+                if (Object.keys(firebaseConfig).length > 0) {
+                    app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    storage = getStorage(app);
+                    console.log("Firebase initialized successfully. App, Auth, DB, and Storage instances created.");
+
+                    onAuthStateChanged(auth, async (user) => {
+                        console.log("Auth state changed. User:", user ? user.uid : "null");
+
+                        // Get references to all relevant UI elements
+                        const loginLink = document.getElementById('loginLink');
+                        const userAvatarContainer = document.getElementById('userAvatarContainer');
+                        const userAvatarImg = document.getElementById('userAvatarImg');
+                        const userDropdownMenu = document.getElementById('userDropdownMenu');
+                        const logoutButton = document.getElementById('logoutButton');
+                        const profileLinkDropdown = document.getElementById('profileLinkDropdown');
+
+                        const sidebarLoginListItem = document.getElementById('sidebarLoginListItem');
+                        const sidebarUserAvatarListItem = document.getElementById('sidebarUserAvatarListItem');
+                        const sidebarUserAvatarImg = document.getElementById('sidebarUserAvatarImg');
+                        const sidebarUserName = document.getElementById('sidebarUserName');
+                        const sidebarLogoutListItem = document.getElementById('sidebarLogoutListItem');
+                        const sidebarLogoutButton = document.getElementById('sidebarLogoutButton');
+                        const sidebarProfileLinkDropdown = document.getElementById('sidebarProfileLinkDropdown');
+
+                        const profileName = document.getElementById('profileName');
+                        const profileEmail = document.getElementById('profileEmail');
+                        const profileImagePlaceholder = document.getElementById('profileImagePlaceholder');
+                        const progressBarFill = document.getElementById('progressBarFill');
+                        const progressBarText = document.getElementById('progressBarText');
+                        const submittedFilesList = document.getElementById('submittedFilesList');
+                        const quizResultsTableBody = document.getElementById('quizResultsTableBody');
+                        const teacherRemarksContent = document.getElementById('teacherRemarksContent');
+
+                        if (user) {
+                            currentUserId = user.uid;
+                            const userIdDisplay = document.getElementById('userIdDisplay');
+                            if (userIdDisplay) userIdDisplay.textContent = `User ID: ${currentUserId}`;
+
+                            // Top Nav UI
+                            if (loginLink) loginLink.classList.add('hidden');
+                            if (userAvatarContainer) {
+                                userAvatarContainer.classList.remove('hidden');
+                                if (userAvatarImg) {
+                                    userAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
+                                    userAvatarImg.alt = user.displayName || 'User Avatar';
+                                }
+                                userAvatarContainer.onclick = toggleUserDropdown;
+                            }
+                            if (logoutButton) logoutButton.onclick = handleLogout;
+                            if (profileLinkDropdown) profileLinkDropdown.href = `profile.html?uid=${user.uid}`;
+
+                            // Sidebar Nav UI
+                            if (sidebarLoginListItem) sidebarLoginListItem.classList.add('hidden');
+                            if (sidebarUserAvatarListItem) {
+                                sidebarUserAvatarListItem.classList.remove('hidden');
+                                if (sidebarUserAvatarImg) {
+                                    sidebarUserAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
+                                    sidebarUserAvatarImg.alt = user.displayName || 'User Avatar';
+                                }
+                                if (sidebarUserName) sidebarUserName.textContent = user.displayName || user.email || 'User';
+                            }
+                            if (sidebarLogoutListItem) sidebarLogoutListItem.classList.remove('hidden');
+                            if (sidebarLogoutButton) sidebarLogoutButton.onclick = handleLogout;
+                            if (sidebarProfileLinkDropdown) {
+                                sidebarProfileLinkDropdown.classList.remove('hidden');
+                                sidebarProfileLinkDropdown.querySelector('a').href = `profile.html?uid=${user.uid}`;
+                            }
+
+                            // Firestore User Profile Management
+                            const userProfileRef = doc(db, `artifacts/${appId}/users/${currentUserId}/user_profiles`, currentUserId);
+                            try {
+                                const userProfileSnap = await getDoc(userProfileRef);
+                                if (!userProfileSnap.exists()) {
+                                    await setDoc(userProfileRef, {
+                                        email: user.email || null,
+                                        displayName: user.displayName || null,
+                                        photoURL: user.photoURL || null,
+                                        role: user.isAnonymous ? 'anonymous' : 'standard',
+                                        registrationDate: new Date().toISOString(),
+                                    }, { merge: true });
+                                    console.log("Created new user profile for:", currentUserId);
+                                }
+                                await setDoc(userProfileRef, {
+                                    lastLogin: new Date().toISOString()
+                                }, { merge: true });
+                                console.log("Last login updated for user:", currentUserId);
+
+                                const userData = userProfileSnap.data();
+                                profileName.textContent = userData.displayName || user.email || 'N/A';
+                                profileEmail.textContent = userData.email || user.email || 'N/A';
+                                if (profileImagePlaceholder) {
+                                    if (userData.photoURL) {
+                                        profileImagePlaceholder.innerHTML = `<img src="${userData.photoURL}" alt="User Profile Picture">`;
+                                    } else {
+                                        profileImagePlaceholder.textContent = (userData.displayName || user.email || 'U').charAt(0).toUpperCase();
+                                    }
+                                }
+
+                                await loadSubmittedFiles(currentUserId);
+                                await loadQuizResults(currentUserId);
+                                await loadTeacherRemarks(currentUserId);
+                                await updateProgressBar(currentUserId);
+
+                            } catch (error) {
+                                console.error("Error ensuring/updating user profile in Firestore or loading data:", error);
+                                window.showModal('Error loading user data: ' + error.message);
+                            }
+
+                        } else {
+                            currentUserId = null;
+                            const userIdDisplay = document.getElementById('userIdDisplay');
+                            if (userIdDisplay) userIdDisplay.textContent = 'Not logged in';
+
+                            // Top Nav UI
+                            if (loginLink) {
+                                loginLink.classList.remove('hidden');
+                                loginLink.textContent = 'Login';
+                                loginLink.href = 'login.html';
+                                loginLink.onclick = null;
+                            }
+                            if (userAvatarContainer) userAvatarContainer.classList.add('hidden');
+                            if (userDropdownMenu) userDropdownMenu.classList.remove('show');
+
+                            // Sidebar Nav UI
+                            if (sidebarLoginListItem) {
+                                sidebarLoginListItem.classList.remove('hidden');
+                                const sidebarLoginLink = document.getElementById('sidebarLoginLink');
+                                if (sidebarLoginLink) {
+                                    sidebarLoginLink.textContent = 'Login';
+                                    sidebarLoginLink.href = 'login.html';
+                                    sidebarLoginLink.onclick = null;
+                                }
+                            }
+                            if (sidebarUserAvatarListItem) sidebarUserAvatarListItem.classList.add('hidden');
+                            if (sidebarLogoutListItem) sidebarLogoutListItem.classList.add('hidden');
+                            if (sidebarProfileLinkDropdown) sidebarProfileLinkDropdown.classList.add('hidden');
+
+                            // Clear profile details
+                            if (profileName) profileName.textContent = 'Please log in';
+                            if (profileEmail) profileEmail.textContent = '';
+                            if (profileImagePlaceholder) profileImagePlaceholder.innerHTML = '';
+                            if (progressBarFill) progressBarFill.style.width = '0%';
+                            if (progressBarText) progressBarText.textContent = '0% Complete';
+                            if (submittedFilesList) submittedFilesList.innerHTML = '<p>No submitted files found. Please log in.</p>';
+                            if (quizResultsTableBody) quizResultsTableBody.innerHTML = '<tr><td colspan="6">No quiz results found. Please log in.</td></tr>';
+                            if (teacherRemarksContent) teacherRemarksContent.textContent = 'No remarks from the teacher yet. Please log in.';
+
+                            if (window.location.pathname.includes('profile.html') && isAuthReady) {
+                                window.showModal('You need to be logged in to view your profile.', () => {
+                                    window.location.href = 'login.html';
+                                });
+                            }
+                        }
+                        isAuthReady = true;
+                        console.log("Firebase Auth state initial check complete (isAuthReady = true).");
+                    });
+                } else {
+                    console.error("Firebase config is empty after parsing. Firebase will not be initialized.");
+                    const userIdDisplay = document.getElementById('userIdDisplay');
+                    if (userIdDisplay) userIdDisplay.textContent = 'Firebase not initialized (config empty)';
+                    window.showModal("Firebase configuration is empty. Please ensure your Canvas environment provides a valid config.");
+                }
+            } catch (e) {
+                console.error("Critical error during Firebase setup:", e);
+                window.showModal('A critical error occurred during Firebase setup: ' + e.message + '. Check console for details.');
+                const userIdDisplay = document.getElementById('userIdDisplay');
+                if (userIdDisplay) userIdDisplay.textContent = 'Firebase critical error';
             }
-        } else {
-            console.warn("__firebase_config is undefined or empty. Firebase will not be initialized with proper config.");
-            window.showModal("Firebase configuration is missing. Please ensure your Canvas environment provides it.");
-            throw new Error("Firebase config missing.");
         }
 
-        if (typeof window.__app_id !== 'undefined' && window.__app_id) {
-            appId = window.__app_id;
-            console.log("App ID from global window:", appId);
-        } else {
-            console.warn("__app_id is undefined or empty. Using default-app-id.");
+        // --- Data Loading Functions ---
+
+        async function loadSubmittedFiles(userId) {
+            if (!db || !userId || !appId) {
+                console.warn("Firestore, userId, or appId not available for loading submitted files.");
+                const filesList = document.getElementById('submittedFilesList');
+                if (filesList) filesList.innerHTML = '<p>Failed to load files: Not authenticated or Firebase not ready.</p>';
+                return;
+            }
+
+            const filesCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/activities`);
+            const q = query(filesCollectionRef, where('type', '==', 'file_submission'), orderBy('timestamp', 'desc'));
+
+            onSnapshot(q, (querySnapshot) => {
+                console.log("Submitted files snapshot received.");
+                const filesContainer = document.getElementById('submittedFilesList');
+                if (!filesContainer) return;
+
+                filesContainer.innerHTML = '';
+
+                if (querySnapshot.empty) {
+                    filesContainer.innerHTML = '<p>No submitted files found yet.</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const fileData = doc.data();
+                    const fileItem = document.createElement('div');
+                    fileItem.classList.add('file-item');
+                    fileItem.innerHTML = `
+                        <span>${fileData.activityName || 'Untitled File'}</span>
+                        <div class="file-buttons-container">
+                            <button class="file-button download-btn" data-file-path="${fileData.details.fileUrl || ''}" ${fileData.details.fileUrl ? '' : 'disabled'}>Download</button>
+                            <button class="file-button view-btn" data-file-path="${fileData.details.fileUrl || ''}" ${fileData.details.fileUrl ? '' : 'disabled'}>View</button>
+                        </div>
+                        <span class="file-status status-submitted">Status: ${fileData.details.status || 'Submitted'}</span>
+                    `;
+                    filesContainer.appendChild(fileItem);
+                });
+
+                filesContainer.querySelectorAll('.download-btn').forEach(button => {
+                    button.addEventListener('click', (event) => downloadFile(event.target.dataset.filePath));
+                });
+                filesContainer.querySelectorAll('.view-btn').forEach(button => {
+                    button.addEventListener('click', (event) => viewFile(event.target.dataset.filePath));
+                });
+
+            }, (error) => {
+                console.error("Error loading submitted files:", error);
+                window.showModal('Error loading submitted files: ' + error.message);
+                const filesList = document.getElementById('submittedFilesList');
+                if (filesList) filesList.innerHTML = '<p>Error loading submitted files.</p>';
+            });
         }
 
-       if (Object.keys(firebaseConfig).length > 0) {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            storage = getStorage(app); // Initialize storage
-            console.log("Firebase initialized successfully. App, Auth, DB, and Storage instances created.");
+        async function loadQuizResults(userId) {
+            if (!db || !userId || !appId) {
+                console.warn("Firestore, userId, or appId not available for loading quiz results.");
+                const quizTableBody = document.getElementById('quizResultsTableBody');
+                if (quizTableBody) quizTableBody.innerHTML = '<tr><td colspan="6">Failed to load quiz results: Not authenticated or Firebase not ready.</td></tr>';
+                return;
+            }
 
-            // Listen for authentication state changes
-            onAuthStateChanged(auth, async (user) => {
-                console.log("Auth state changed. User:", user ? user.uid : "null");
+            const quizzesCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/activities`);
+            const q = query(quizzesCollectionRef, where('type', '==', 'quiz_result'), orderBy('timestamp', 'desc'));
 
-                // Get references to all relevant UI elements for TOP NAV
-                const loginLink = document.getElementById('loginLink');
-                const userAvatarContainer = document.getElementById('userAvatarContainer');
-                const userAvatarImg = document.getElementById('userAvatarImg');
-                const userDropdownMenu = document.getElementById('userDropdownMenu');
-                const logoutButton = document.getElementById('logoutButton');
-                const profileLinkDropdown = document.getElementById('profileLinkDropdown');
+            onSnapshot(q, (querySnapshot) => {
+                console.log("Quiz results snapshot received.");
+                const quizTableBody = document.getElementById('quizResultsTableBody');
+                if (!quizTableBody) return;
 
-                // Get references to all relevant UI elements for SIDEBAR
-                const sidebarLoginListItem = document.getElementById('sidebarLoginListItem');
-                const sidebarUserAvatarListItem = document.getElementById('sidebarUserAvatarListItem');
-                const sidebarUserAvatarImg = document.getElementById('sidebarUserAvatarImg');
-                const sidebarLogoutButton = document.getElementById('sidebarLogoutButton');
-                const sidebarProfileLinkDropdown = document.getElementById('sidebarProfileLinkDropdown');
+                quizTableBody.innerHTML = '';
 
-                const profileName = document.getElementById('profileName');
-                const profileEmail = document.getElementById('profileEmail');
-                const profileImagePlaceholder = document.getElementById('profileImagePlaceholder');
+                if (querySnapshot.empty) {
+                    quizTableBody.innerHTML = '<tr><td colspan="6">No quiz results found yet.</td>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const quizData = doc.data();
+                    const row = quizTableBody.insertRow();
+                    row.innerHTML = `
+                        <td>${quizData.activityName || 'N/A'}</td>
+                        <td class="score">${quizData.details.score || 'N/A'}/${quizData.details.maxScore || 'N/A'}</td>
+                        <td>${quizData.details.timeTakenMinutes || 'N/A'} minutes</td>
+                        <td>${quizData.details.dateTaken ? new Date(quizData.details.dateTaken).toLocaleDateString() : 'N/A'}</td>
+                        <td>${quizData.details.attempts || 0}</td>
+                        <td>
+                            <button class="view-btn" title="View Comments" data-quiz-id="${doc.id}"></button>
+                        </td>
+                    `;
+                });
+
+                quizTableBody.querySelectorAll('.view-btn').forEach(button => {
+                    button.addEventListener('click', (event) => viewQuizComments(event.target.dataset.quizId));
+                });
+
+            }, (error) => {
+                console.error("Error loading quiz results:", error);
+                window.showModal('Error loading quiz results: ' + error.message);
+                const quizTableBody = document.getElementById('quizResultsTableBody');
+                if (quizTableBody) quizTableBody.innerHTML = '<tr><td colspan="6">Error loading quiz results.</td></tr>';
+            });
+        }
+
+        async function loadTeacherRemarks(userId) {
+            if (!db || !userId || !appId) {
+                console.warn("Firestore, userId, or appId not available for loading teacher remarks.");
+                const remarksContentDiv = document.getElementById('teacherRemarksContent');
+                if (remarksContentDiv) remarksContentDiv.textContent = 'Failed to load remarks: Not authenticated or Firebase not ready.';
+                return;
+            }
+
+            const remarksDocRef = doc(db, `artifacts/${appId}/users/${userId}/teacher_remarks`, 'latest');
+
+            onSnapshot(remarksDocRef, (remarksSnap) => {
+                console.log("Teacher remarks snapshot received.");
+                const remarksContentDiv = document.getElementById('teacherRemarksContent');
+                if (!remarksContentDiv) return;
+
+                if (remarksSnap.exists() && remarksSnap.data().remark) {
+                    remarksContentDiv.textContent = remarksSnap.data().remark;
+                } else {
+                    remarksContentDiv.textContent = 'No remarks from the teacher yet.';
+                }
+            }, (error) => {
+                console.error("Error loading teacher's remarks:", error);
+                window.showModal('Error loading teacher remarks: ' + error.message);
+                const remarksContentDiv = document.getElementById('teacherRemarksContent');
+                if (remarksContentDiv) remarksContentDiv.textContent = 'Error loading remarks.';
+            });
+        }
+
+        async function updateProgressBar(userId) {
+            if (!db || !userId || !appId) {
+                console.warn("Firestore, userId, or appId not available for updating progress bar.");
+                return;
+            }
+
+            const quizzesCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/activities`);
+            const q = query(quizzesCollectionRef, where('type', '==', 'quiz_result'));
+            try {
+                const querySnapshot = await getDocs(q);
+                let completedQuizzes = 0;
+                const totalModules = 5;
+
+                querySnapshot.forEach(doc => {
+                    const quizData = doc.data().details;
+                    if (quizData && quizData.score !== undefined && quizData.maxScore !== undefined && quizData.maxScore > 0) {
+                        if ((quizData.score / quizData.maxScore) >= 0.7) {
+                            completedQuizzes++;
+                        }
+                    }
+                });
+
+                const progressPercentage = totalModules > 0 ? Math.min(100, Math.max(0, (completedQuizzes / totalModules) * 100)) : 0;
+                
                 const progressBarFill = document.getElementById('progressBarFill');
                 const progressBarText = document.getElementById('progressBarText');
-                const submittedFilesList = document.getElementById('submittedFilesList');
-                const quizResultsTableBody = document.getElementById('quizResultsTableBody');
-                const teacherRemarksContent = document.getElementById('teacherRemarksContent');
 
-                if (user) {
-                    // User is signed in
-                    currentUserId = user.uid;
-                    const userIdDisplay = document.getElementById('userIdDisplay'); // Assuming this exists for debugging
-                    if (userIdDisplay) userIdDisplay.textContent = `User ID: ${currentUserId}`;
-
-                    // --- Top Navigation UI Update (Logged In) ---
-                    if (loginLink) loginLink.classList.add('hidden');
-                    if (userAvatarContainer) {
-                        userAvatarContainer.classList.remove('hidden');
-                        if (userAvatarImg) {
-                            userAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
-                            userAvatarImg.alt = user.displayName || 'User Avatar';
-                        }
-                        userAvatarContainer.onclick = toggleUserDropdown;
-                    }
-                    if (logoutButton) logoutButton.onclick = handleLogout;
-                    if (profileLinkDropdown) profileLinkDropdown.href = `profile.html?uid=${user.uid}`;
-
-                    // --- Sidebar Navigation UI Update (Logged In) ---
-                    if (sidebarLoginListItem) sidebarLoginListItem.classList.add('hidden');
-                    if (sidebarUserAvatarListItem) {
-                        sidebarUserAvatarListItem.classList.remove('hidden');
-                        if (sidebarUserAvatarImg) {
-                            sidebarUserAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
-                            sidebarUserAvatarImg.alt = user.displayName || 'User Avatar';
-                        }
-                    }
-                    if (sidebarLogoutListItem) sidebarLogoutListItem.classList.remove('hidden');
-                    if (sidebarLogoutButton) sidebarLogoutButton.onclick = handleLogout;
-                    if (sidebarProfileLinkDropdown) sidebarProfileLinkDropdown.href = `profile.html?uid=${user.uid}`;
-
-                    // --- Firestore User Profile Management ---
-                    const userProfileRef = doc(db, `artifacts/${appId}/users/${currentUserId}/user_profiles`, currentUserId);
-                    try {
-                        const userProfileSnap = await getDoc(userProfileRef);
-                        if (!userProfileSnap.exists()) {
-                            await setDoc(userProfileRef, {
-                                email: user.email || null,
-                                displayName: user.displayName || null,
-                                photoURL: user.photoURL || null,
-                                role: user.isAnonymous ? 'anonymous' : 'standard',
-                                registrationDate: new Date().toISOString(),
-                            }, { merge: true });
-                            console.log("Created new user profile for:", currentUserId);
-                        }
-                        await setDoc(userProfileRef, {
-                            lastLogin: new Date().toISOString()
-                        }, { merge: true });
-                        console.log("Last login updated for user:", currentUserId);
-
-                        // Populate profile details
-                        const userData = userProfileSnap.data();
-                        profileName.textContent = userData.displayName || user.email || 'N/A';
-                        profileEmail.textContent = userData.email || user.email || 'N/A';
-                        if (userData.photoURL) {
-                            profileImagePlaceholder.innerHTML = `<img src="${userData.photoURL}" alt="User Profile Picture">`;
-                        } else {
-                            profileImagePlaceholder.textContent = (userData.displayName || user.email || 'U').charAt(0).toUpperCase();
-                        }
-
-                        // Load user specific data
-                        await loadSubmittedFiles(currentUserId);
-                        await loadQuizResults(currentUserId);
-                        await loadTeacherRemarks(currentUserId);
-                        await updateProgressBar(currentUserId); // Update progress bar based on actual data
-
-                    } catch (error) {
-                        console.error("Error ensuring/updating user profile in Firestore or loading data:", error);
-                        window.showModal('Error loading user data: ' + error.message);
-                    }
-
-                } else {
-                    // User is signed out
-                    currentUserId = null;
-                    const userIdDisplay = document.getElementById('userIdDisplay');
-                    if (userIdDisplay) userIdDisplay.textContent = 'Not logged in';
-
-                    // --- Top Navigation UI Update (Logged Out) ---
-                    if (loginLink) {
-                        loginLink.classList.remove('hidden');
-                        loginLink.textContent = 'Login';
-                        loginLink.href = 'login.html';
-                        loginLink.onclick = null;
-                    }
-                    if (userAvatarContainer) userAvatarContainer.classList.add('hidden');
-                    if (userDropdownMenu) userDropdownMenu.classList.remove('show');
-
-                    // --- Sidebar Navigation UI Update (Logged Out) ---
-                    if (sidebarLoginListItem) {
-                        sidebarLoginListItem.classList.remove('hidden');
-                        const sidebarLoginLink = document.getElementById('sidebarLoginLink');
-                        if (sidebarLoginLink) {
-                            sidebarLoginLink.textContent = 'Login';
-                            sidebarLoginLink.href = 'login.html';
-                            sidebarLoginLink.onclick = null;
-                        }
-                    }
-                    if (sidebarUserAvatarListItem) sidebarUserAvatarListItem.classList.add('hidden');
-                    if (sidebarLogoutListItem) sidebarLogoutListItem.classList.add('hidden');
-
-                    // Clear profile details if logged out
-                    profileName.textContent = 'Please log in';
-                    profileEmail.textContent = '';
-                    profileImagePlaceholder.innerHTML = '';
-                    progressBarFill.style.width = '0%';
-                    progressBarText.textContent = '0% Complete';
-                    submittedFilesList.innerHTML = '<p>No submitted files found. Please log in.</p>';
-                    quizResultsTableBody.innerHTML = '<tr><td colspan="6">No quiz results found. Please log in.</td></tr>';
-                    teacherRemarksContent.textContent = 'No remarks from the teacher yet. Please log in.';
-
-                    // Redirect to login page if on profile page and not logged in after initial check
-                    if (window.location.pathname.includes('profile.html') && isAuthReady) {
-                        window.showModal('You need to be logged in to view your profile.', () => {
-                            window.location.href = 'login.html';
-                        });
-                    }
+                if (progressBarFill && progressBarText) {
+                    progressBarFill.style.width = `${progressPercentage}%`;
+                    progressBarText.textContent = `${Math.round(progressPercentage)}% Complete`;
                 }
-                isAuthReady = true;
-                console.log("Firebase Auth state initial check complete (isAuthReady = true).");
-            });
-        } else {
-            console.error("Firebase config is empty after parsing. Firebase will not be initialized.");
-            const userIdDisplay = document.getElementById('userIdDisplay');
-            if (userIdDisplay) userIdDisplay.textContent = 'Firebase not initialized (config empty)';
-            window.showModal("Firebase configuration is empty. Please ensure your Canvas environment provides a valid config.");
+
+            } catch (error) {
+                console.error("Error updating progress bar:", error);
+            }
         }
-    } catch (e) {
-        console.error("Critical error during Firebase setup:", e);
-        window.showModal('A critical error occurred during Firebase setup: ' + e.message + '. Check console for details.');
-        const userIdDisplay = document.getElementById('userIdDisplay');
-        if (userIdDisplay) userIdDisplay.textContent = 'Firebase critical error';
-    }
 
-    // --- Data Loading Functions ---
+        // --- Logout Function ---
+        async function handleLogout(e) {
+            e.preventDefault();
+            console.log("Logout button clicked.");
 
-    // Function to load submitted files
-    async function loadSubmittedFiles(userId) {
-        const filesCollectionRef = collection(db, `artifacts/${window.__app_id}/users/${userId}/submitted_files`);
-        const q = query(filesCollectionRef);
-        try {
-            const querySnapshot = await getDocs(q);
-            const filesContainer = document.getElementById('submittedFilesList');
-            filesContainer.innerHTML = ''; // Clear existing content
-
-            if (querySnapshot.empty) {
-                filesContainer.innerHTML = '<p>No submitted files found.</p>';
+            if (!auth) {
+                window.showModal('Firebase Auth is not initialized. Cannot log out.');
                 return;
             }
-
-            querySnapshot.forEach((doc) => {
-                const fileData = doc.data();
-                const fileItem = document.createElement('div');
-                fileItem.classList.add('file-item');
-                fileItem.innerHTML = `
-                    <span>${fileData.name || 'Untitled File'}</span>
-                    <div>
-                        <button class="file-button download-btn" data-file-path="${fileData.filePath}" ${fileData.filePath ? '' : 'disabled'}>Download</button>
-                        <button class="file-button view-btn" data-file-path="${fileData.filePath}" ${fileData.filePath ? '' : 'disabled'}>View</button>
-                    </div>
-                    <span class="file-status status-submitted">Status: ${fileData.status || 'Submitted'}</span>
-                `;
-                filesContainer.appendChild(fileItem);
-            });
-
-            // Add event listeners to the dynamically created buttons
-            filesContainer.querySelectorAll('.download-btn').forEach(button => {
-                button.addEventListener('click', (event) => downloadFile(event.target.dataset.filePath));
-            });
-            filesContainer.querySelectorAll('.view-btn').forEach(button => {
-                button.addEventListener('click', (event) => viewFile(event.target.dataset.filePath));
-            });
-
-        } catch (error) {
-            console.error("Error loading submitted files:", error);
-            window.showModal('Error loading submitted files: ' + error.message);
-            const filesContainer = document.getElementById('submittedFilesList');
-            filesContainer.innerHTML = '<p>Error loading submitted files.</p>';
+            try {
+                await signOut(auth);
+                sessionStorage.removeItem('isLoggedIn');
+                sessionStorage.removeItem('userEmail');
+                sessionStorage.removeItem('userType');
+                window.showModal('You have been logged out.', () => {
+                    window.location.href = 'login.html';
+                });
+            } catch (error) {
+                console.error("Error during logout:", error);
+                window.showModal('Logout failed: ' + error.message);
+            }
         }
-    }
 
-    // Function to load quiz results
-    async function loadQuizResults(userId) {
-        const quizzesCollectionRef = collection(db, `artifacts/${window.__app_id}/users/${userId}/quiz_results`);
-        const q = query(quizzesCollectionRef);
-        try {
-            const querySnapshot = await getDocs(q);
-            const quizTableBody = document.getElementById('quizResultsTableBody');
-            quizTableBody.innerHTML = ''; // Clear existing content
+        // --- User Avatar Dropdown Toggle (for Top Nav) ---
+        function toggleUserDropdown() {
+            const userDropdownMenu = document.getElementById('userDropdownMenu');
+            if (userDropdownMenu) {
+                userDropdownMenu.classList.toggle('show');
+            }
+        }
 
-            if (querySnapshot.empty) {
-                quizTableBody.innerHTML = '<tr><td colspan="6">No quiz results found.</td></tr>';
+        // --- Close dropdown if clicked outside ---
+        document.addEventListener('click', (event) => {
+            const userAvatarContainer = document.getElementById('userAvatarContainer');
+            const userDropdownMenu = document.getElementById('userDropdownMenu');
+            if (userAvatarContainer && userDropdownMenu && !userAvatarContainer.contains(event.target) && !userDropdownMenu.contains(event.target)) {
+                userDropdownMenu.classList.remove('show');
+            }
+        });
+
+        // --- File Handling Functions (now use Firebase Storage) ---
+        async function downloadFile(filePath) {
+            if (!storage || !filePath) {
+                window.showModal('File path is missing or Firebase Storage is not initialized.');
                 return;
             }
-
-            querySnapshot.forEach((doc) => {
-                const quizData = doc.data();
-                const row = quizTableBody.insertRow();
-                row.innerHTML = `
-                    <td>${quizData.moduleName || 'N/A'}:<br>${quizData.quizName || 'N/A'}</td>
-                    <td class="score">${quizData.score || 'N/A'}/${quizData.maxScore || 'N/A'}</td>
-                    <td>${quizData.timeTaken || 'N/A'} minutes</td>
-                    <td>${quizData.dateTaken ? new Date(quizData.dateTaken).toLocaleDateString() : 'N/A'}</td>
-                    <td>${quizData.attempts || 0}</td>
-                    <td><button class="view-btn" title="View Comments" data-quiz-id="${doc.id}"></button></td>
-                `;
-            });
-
-            quizTableBody.querySelectorAll('.view-btn').forEach(button => {
-                button.addEventListener('click', (event) => viewQuizComments(event.target.dataset.quizId));
-            });
-
-        } catch (error) {
-            console.error("Error loading quiz results:", error);
-            window.showModal('Error loading quiz results: ' + error.message);
-            const quizTableBody = document.getElementById('quizResultsTableBody');
-            quizTableBody.innerHTML = '<tr><td colspan="6">Error loading quiz results.</td></tr>';
+            try {
+                const fileRef = ref(storage, filePath);
+                const url = await getDownloadURL(fileRef);
+                const a = document.createElement('a');
+                a.href = url;
+                a.target = '_blank';
+                a.download = filePath.split('/').pop();
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.showModal('File download initiated. Check your downloads.');
+            } catch (error) {
+                console.error("Error downloading file:", error);
+                window.showModal('Failed to download file: ' + error.message);
+            }
         }
-    }
 
-    // Function to load teacher's remarks
-    async function loadTeacherRemarks(userId) {
-        const remarksDocRef = doc(db, `artifacts/${window.__app_id}/users/${userId}/teacher_remarks`, 'latest'); // Assuming one document for all remarks
-        try {
-            const remarksSnap = await getDoc(remarksDocRef);
-            const remarksContentDiv = document.getElementById('teacherRemarksContent');
-            if (remarksSnap.exists() && remarksSnap.data().remark) {
-                remarksContentDiv.textContent = remarksSnap.data().remark;
+        async function viewFile(filePath) {
+            if (!storage || !filePath) {
+                window.showModal('File path is missing or Firebase Storage is not initialized.');
+                return;
+            }
+            try {
+                const fileRef = ref(storage, filePath);
+                const url = await getDownloadURL(fileRef);
+                window.open(url, '_blank');
+                window.showModal('File viewer opened in a new tab.');
+            } catch (error) {
+                console.error("Error viewing file:", error);
+                window.showModal('Failed to view file: ' + error.message);
+            }
+        }
+
+        function viewQuizComments(quizId) {
+            window.showModal(`Viewing comments for Quiz ID: ${quizId}\n(This feature is a placeholder and needs to be implemented to fetch actual comments.)`);
+            console.log(`View comments for quiz: ${quizId}`);
+        }
+
+        function returnToPrevious() {
+            window.history.back();
+        }
+
+        // --- Modal Functions ---
+        window.showModal = function(message, callback) {
+            console.log("Showing modal with message:", message);
+            const modal = document.getElementById('myModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.textContent = message;
+            modal.style.display = 'flex';
+            if (callback && typeof callback === 'function') {
+                modal.callback = callback;
+                modal.dataset.hasCallback = 'true';
             } else {
-                remarksContentDiv.textContent = 'No remarks from the teacher yet.';
+                modal.callback = null;
+                modal.dataset.hasCallback = 'false';
             }
-        } catch (error) {
-            console.error("Error loading teacher's remarks:", error);
-            window.showModal('Error loading teacher remarks: ' + error.message);
-            document.getElementById('teacherRemarksContent').textContent = 'Error loading remarks.';
-        }
-    }
+        };
 
-    // Function to update progress bar
-    async function updateProgressBar(userId) {
-        // This is a simplified example. You might have a 'modules' collection
-        // and track completion there, or sum up quiz scores.
-        // For now, let's base it on quizzes for demonstration.
-        const quizzesCollectionRef = collection(db, `artifacts/${window.__app_id}/users/${userId}/quiz_results`);
-        try {
-            const querySnapshot = await getDocs(quizzesCollectionRef);
-            let completedQuizzes = 0;
-            const totalQuizzes = 5; // Assuming there are 5 modules/quizzes in total
+        window.closeModal = function() {
+            console.log("Closing modal.");
+            const modal = document.getElementById('myModal');
+            modal.style.display = 'none';
+            if (modal.dataset.hasCallback === 'true' && typeof modal.callback === 'function') {
+                console.log("Executing modal callback.");
+                modal.callback();
+                modal.callback = null;
+                modal.dataset.hasCallback = 'false';
+            }
+        };
 
-            querySnapshot.forEach(doc => {
-                const quizData = doc.data();
-                // Consider a quiz "complete" if score is, for example, 70% or more
-                if (quizData.score && quizData.maxScore && (quizData.score / quizData.maxScore) >= 0.7) {
-                    completedQuizzes++;
-                }
-            });
+        // --- Initial DOMContentLoaded checks and event listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOMContentLoaded event fired for profile.html.");
 
-            const progressPercentage = (completedQuizzes / totalQuizzes) * 100;
-            const progressBarFill = document.getElementById('progressBarFill');
-            const progressBarText = document.getElementById('progressBarText');
-
-            if (progressBarFill && progressBarText) {
-                progressBarFill.style.width = `${progressPercentage}%`;
-                progressBarText.textContent = `${Math.round(progressPercentage)}% Complete`;
+            const yearSpan = document.getElementById('year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
             }
 
-        } catch (error) {
-            console.error("Error updating progress bar:", error);
-        }
-    }
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const sidebarContainer = document.getElementById('sidebar-container');
+            const sidebarMenu = document.getElementById('sidebar-menu');
 
-    // --- Logout Function ---
-    async function handleLogout(e) {
-        e.preventDefault();
-        console.log("Logout button clicked.");
+            if (hamburgerIcon) {
+                hamburgerIcon.addEventListener('click', () => {
+                    sidebarContainer.classList.add('open');
+                    sidebarMenu.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
 
-        if (!auth) {
-            window.showModal('Firebase Auth is not initialized. Cannot log out.');
-            return;
-        }
-        try {
-            await signOut(auth);
-            localStorage.removeItem('token'); // Clear any local token if used
-            window.showModal('You have been logged out.', () => {
-                window.location.href = 'login.html';
-            });
-        } catch (error) {
-            console.error("Error during logout:", error);
-            window.showModal('Logout failed: ' + error.message);
-        }
-    }
-
-    // --- User Avatar Dropdown Toggle (for Top Nav) ---
-    function toggleUserDropdown() {
-        const userDropdownMenu = document.getElementById('userDropdownMenu');
-        if (userDropdownMenu) {
-            userDropdownMenu.classList.toggle('show');
-        }
-    }
-
-    // --- Close dropdown if clicked outside ---
-    document.addEventListener('click', (event) => {
-        const userAvatarContainer = document.getElementById('userAvatarContainer');
-        const userDropdownMenu = document.getElementById('userDropdownMenu');
-        if (userAvatarContainer && userDropdownMenu && !userAvatarContainer.contains(event.target) && !userDropdownMenu.contains(event.target)) {
-            userDropdownMenu.classList.remove('show');
-        }
-    });
-
-    // --- File Handling Functions (now use Firebase Storage) ---
-    async function downloadFile(filePath) {
-        if (!storage || !filePath) {
-            window.showModal('File path is missing or Firebase Storage is not initialized.');
-            return;
-        }
-        try {
-            const fileRef = ref(storage, filePath);
-            const url = await getDownloadURL(fileRef);
-            const a = document.createElement('a');
-            a.href = url;
-            a.target = '_blank'; // Open in new tab
-            a.download = filePath.split('/').pop(); // Suggest original file name
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.showModal('File download initiated.');
-        } catch (error) {
-            console.error("Error downloading file:", error);
-            window.showModal('Failed to download file: ' + error.message);
-        }
-    }
-
-    async function viewFile(filePath) {
-        if (!storage || !filePath) {
-            window.showModal('File path is missing or Firebase Storage is not initialized.');
-            return;
-        }
-        try {
-            const fileRef = ref(storage, filePath);
-            const url = await getDownloadURL(fileRef);
-            // Open in a new tab for viewing (browser handles most common file types)
-            window.open(url, '_blank');
-            window.showModal('File viewer opened in a new tab.');
-        } catch (error) {
-            console.error("Error viewing file:", error);
-            window.showModal('Failed to view file: ' + error.message);
-        }
-    }
-
-    function viewQuizComments(quizId) {
-        // Implement logic to show quiz comments, e.g., in a modal or new page
-        window.showModal(`Viewing comments for Quiz ID: ${quizId}\n(Feature to be implemented)`);
-        console.log(`View comments for quiz: ${quizId}`);
-    }
-
-    function returnToPrevious() {
-        // Simple back navigation
-        window.history.back();
-    }
-
-    // Initial DOMContentLoaded checks
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log("DOMContentLoaded event fired.");
-
-        // Set the current year in the footer
-        const yearSpan = document.getElementById('year');
-        if (yearSpan) {
-            yearSpan.textContent = new Date().getFullYear();
-        }
-
-        // Sidebar functionality from second file
-        const hamburgerIcon = document.getElementById('hamburger-icon');
-        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
-        const sidebarContainer = document.getElementById('sidebar-container');
-        const sidebarMenu = document.getElementById('sidebar-menu');
-
-        // Open sidebar
-        if (hamburgerIcon) {
-            hamburgerIcon.addEventListener('click', () => {
-                sidebarContainer.classList.add('open');
-                sidebarMenu.classList.add('open');
-                document.body.style.overflow = 'hidden';
-            });
-        }
-
-        // Close sidebar by clicking close button
-        if (closeSidebarBtn) {
-            closeSidebarBtn.addEventListener('click', () => {
-                sidebarContainer.classList.remove('open');
-                sidebarMenu.classList.remove('open');
-                document.body.style.overflow = '';
-            });
-        }
-
-        // Close sidebar by clicking outside the menu
-        if (sidebarContainer) {
-            sidebarContainer.addEventListener('click', (event) => {
-                if (event.target === sidebarContainer) {
+            if (closeSidebarBtn) {
+                closeSidebarBtn.addEventListener('click', () => {
                     sidebarContainer.classList.remove('open');
                     sidebarMenu.classList.remove('open');
                     document.body.style.overflow = '';
-                }
-            });
-        }
+                });
+            }
 
-        // Close sidebar when a link inside is clicked
-        const sidebarLinks = document.querySelectorAll('.sidebar-links a');
-        sidebarLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                sidebarContainer.classList.remove('open');
-                sidebarMenu.classList.remove('open');
-                document.body.style.overflow = '';
+            if (sidebarContainer) {
+                sidebarContainer.addEventListener('click', (event) => {
+                    if (event.target === sidebarContainer) {
+                        sidebarContainer.classList.remove('open');
+                        sidebarMenu.classList.remove('open');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            const sidebarLinks = document.querySelectorAll('.sidebar-links a, .sidebar-links button');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (link.tagName === 'A' || (link.tagName === 'BUTTON' && link.id !== 'sidebarLogoutButton')) {
+                        sidebarContainer.classList.remove('open');
+                        sidebarMenu.classList.remove('open');
+                        document.body.style.overflow = '';
+                    }
+                });
             });
+
+            initializeFirebase();
         });
-    });
     </script>
 </body>
 </html>
