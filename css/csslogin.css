@@ -1,4 +1,4 @@
- * {
+* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -93,22 +93,22 @@
             object-fit: cover;
         }
 
-        /* Hamburger icon styles - now always visible for desktop layout */
+        /* Hamburger icon styles */
         .hamburger-icon {
             background: none;
             border: none;
-            font-size: 28px; /* Made slightly larger for visibility */
+            font-size: 28px;
             cursor: pointer;
             color: #333;
             padding: 5px;
-            display: block; /* Always displayed for desktop-only design */
+            display: none; /* Hidden by default on larger screens */
             flex-shrink: 0;
-            line-height: 1; /* Ensures text is vertically centered without extra spacing */
-            align-self: center; /* Vertically align in flex container */
+            line-height: 1;
+            align-self: center;
         }
 
         .top-nav-links {
-            display: flex; /* Always displayed for desktop-only design */
+            display: flex; /* Visible by default on larger screens */
             gap: 25px;
             align-items: center;
         }
@@ -240,6 +240,7 @@
             justify-content: center; /* Center horizontally */
             flex-grow: 1; /* Allow main content to grow */
             width: 100%;
+            padding-top: 80px; /* Adjust for fixed header */
         }
 
         .welcome-section {
@@ -471,5 +472,21 @@
                 align-self: center;
                 backdrop-filter: none;
                 background: white;
+            }
+            /* Show hamburger on small screens, hide top nav */
+            .hamburger-icon {
+                display: block;
+            }
+            .top-nav-links {
+                display: none;
+            }
+        }
+        @media (min-width: 769px) {
+            /* Hide hamburger on large screens, show top nav */
+            .hamburger-icon {
+                display: none;
+            }
+            .top-nav-links {
+                display: flex;
             }
         }
