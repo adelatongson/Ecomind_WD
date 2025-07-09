@@ -3,37 +3,728 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Progress Report</title>
+    <title>User Progress Report - EcoMind</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="css/cssstatusbar.css">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+            cursor: pointer;
+        }
+
+        /*
+        ---
+        HEADER STYLES
+        ---
+        */
+        .header {
+            background-color: #fff;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .hamburger-icon {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+            padding: 5px;
+            display: block;
+            flex-shrink: 0;
+        }
+        @media (min-width: 769px) {
+            .hamburger-icon {
+                display: none;
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d5016;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .top-nav-links {
+            display: none;
+            gap: 25px;
+            align-items: center;
+        }
+        @media (min-width: 769px) {
+            .top-nav-links {
+                display: flex;
+            }
+        }
+
+        .top-nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 8px 12px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .top-nav-links a:hover {
+            color: #2d5016;
+            background-color: #e6f7e6;
+        }
+
+        .top-nav-links .login-btn {
+            background-color: #9ACD32;
+            color: #2d5016;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .top-nav-links .login-btn:hover {
+            background-color: #8FBC8F;
+            color: #2d5016;
+        }
+
+        #login-status-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            display: none; /* Hidden by default, shown by JS */
+        }
+
+        .user-avatar-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-left: 10px;
+            border: 2px solid #ccc;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .profile-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 100;
+            right: 0;
+            top: calc(100% + 5px);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .profile-dropdown-content a,
+        .profile-dropdown-content button {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            text-align: left;
+            white-space: nowrap;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .profile-dropdown-content a:hover,
+        .profile-dropdown-content button:hover {
+            background-color: #ddd;
+        }
+
+        .profile-dropdown-content.show {
+            display: block;
+        }
+
+        .header .login-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .header .login-button:hover {
+            background-color: #45a049;
+        }
+
+        /*
+        ---
+        SIDEBAR STYLES
+        ---
+        */
+        .sidebar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-container.open {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .sidebar-menu {
+            width: 280px;
+            height: 100%;
+            background-color: #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-menu.open {
+            transform: translateX(0);
+        }
+
+        .close-sidebar-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #555;
+            align-self: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-links li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-links a,
+        .sidebar-links button {
+            display: block;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+
+        .sidebar-links a:hover,
+        .sidebar-links button:hover {
+            background-color: #e6f7e6;
+            color: #2d5016;
+        }
+
+        .sidebar-links a.active {
+            background-color: #d4edda;
+            color: #2d5016;
+            font-weight: 700;
+        }
+
+        .sidebar-user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .sidebar-user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ccc;
+        }
+
+        .sidebar-user-info span {
+            font-weight: 600;
+        }
+
+        /*
+        ---
+        MAIN CONTENT STYLES (Progress Report Specific)
+        ---
+        */
+        .main-content-wrapper {
+            flex-grow: 1;
+            padding: 80px 20px 40px; /* Adjust top padding for fixed header */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .progress-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 900px; /* Max width for the report */
+            padding: 20px;
+        }
+
+        .top-nav {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 0.5fr; /* Name, File, Games, Action */
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #555;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        .user-list-wrapper {
+            max-height: 60vh; /* Limit height for scrollability */
+            overflow-y: auto;
+            padding-right: 10px; /* Space for scrollbar */
+        }
+
+        .user-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .user-entry {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 0.5fr; /* Name, File, Games, Action */
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+
+        .user-entry:last-child {
+            border-bottom: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ccc; /* Default offline */
+            flex-shrink: 0;
+        }
+
+        .status-indicator.online {
+            background-color: #4CAF50; /* Green */
+        }
+
+        .user-name-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .user-name-link:hover {
+            color: #2d5016;
+        }
+
+        .user-progress {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .progress-item .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status.submitted {
+            background-color: #e6f7e6;
+            color: #2d5016;
+        }
+
+        .status.pending {
+            background-color: #fff3c4;
+            color: #f57f17;
+        }
+
+        .status.not-played {
+            background-color: #e0e0e0;
+            color: #666;
+        }
+
+        .user-actions {
+            display: flex;
+            justify-content: center;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            transition: transform 0.2s;
+        }
+
+        .delete-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .delete-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /*
+        ---
+        FOOTER STYLES
+        ---
+        */
+        .footer {
+            background-color: #4F6D44;
+            color: #fff;
+            padding: 60px 0 30px;
+            position: relative;
+            margin-top: auto;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding-top: 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a, .footer-column ul li {
+            text-decoration: none;
+            color: #eee;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: #c9e4c9;
+        }
+
+        .footer-social-icons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+            align-items: center;
+        }
+
+        .footer-social-icons a {
+            color: #eee;
+            font-size: 16px;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .footer-social-icons a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            color: #aaa;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-bottom a {
+            text-decoration: none;
+            color: #aaa;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom a:hover {
+            color: #fff;
+        }
+
+        /*
+        ---
+        MODAL STYLES
+        ---
+        */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000; /* Higher z-index for modals */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            display: flex; /* Use flex for centering */
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+        }
+        .modal-content p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .modal-buttons button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        #confirmDeleteYes {
+            background-color: #ef4444; /* Red */
+            color: white;
+        }
+        #confirmDeleteYes:hover {
+            background-color: #dc2626;
+            transform: translateY(-1px);
+        }
+        #confirmDeleteNo {
+            background-color: #d1d5db; /* Light gray */
+            color: #374151;
+        }
+        #confirmDeleteNo:hover {
+            background-color: #9ca3af;
+            transform: translateY(-1px);
+        }
+
+
+        /*
+        ---
+        RESPONSIVE STYLES
+        ---
+        */
+        @media (max-width: 768px) {
+            .main-content-wrapper {
+                padding: 80px 10px 40px;
+            }
+            .header {
+                padding: 10px 15px;
+            }
+            .logo {
+                font-size: 20px;
+            }
+            .logo img {
+                width: 25px;
+                height: 25px;
+            }
+            .top-nav {
+                grid-template-columns: 1fr; /* Stack columns on small screens */
+                gap: 15px;
+            }
+            .user-entry {
+                grid-template-columns: 1fr; /* Stack columns on small screens */
+                gap: 15px;
+            }
+            .user-actions {
+                justify-content: flex-start; /* Align delete button to start */
+            }
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .footer-column {
+                min-width: auto;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="header">
         <div class="header-left">
             <button class="hamburger-icon" id="hamburger-icon">☰</button>
-            <div class="logo">
-                <span class="logo-icon">
-                    <img src="images/logoecomind.svg" alt="EcoMind Logo">
-                </span>
-                ECOMIND
-            </div>
+            <a href="homepage.html" class="logo">
+                <img src="https://placehold.co/30x30/4CAF50/FFFFFF?text=E" alt="EcoMind Logo">
+                EcoMind
+            </a>
         </div>
         <nav class="top-nav-links">
-            <a href="homepage.html" class="active">Home</a>
+            <a href="homepage.html">Home</a>
             <a href="modulehomepage.html">Modules</a>
             <a href="gamehomepage.html">Game</a>
-<div id="login-status-container">
-            <a href="login.html" class="login-button" id="loginLink">Login</a>
-            <div id="userAvatarContainer" class="user-avatar-container hidden">
-                <img id="userAvatarImg" src="https://static.vecteezy.com/system/resources/thumbnails/019/879/186/small/user-icon-on-transparent-background-free-png.png" alt="User Avatar">
-                <div class="profile-dropdown-content" id="userDropdownMenu"> 
-                    <a href="profile.html" id="profileLinkDropdown">My Profile</a>
-                    <a href="#" id="logoutButton">Logout</a>
-</div>
+            <div id="login-status-container">
+                <a href="login.html" class="login-button" id="loginLink">Login</a>
+                <div id="userAvatarContainer" class="user-avatar-container hidden">
+                    <img id="userAvatarImg" src="https://static.vecteezy.com/system/resources/thumbnails/019/879/186/small/user-icon-on-transparent-background-free-png.png" alt="User Avatar">
+                    <div class="profile-dropdown-content" id="userDropdownMenu"> 
+                        <a href="profile.html" id="profileLinkDropdown">My Profile</a>
+                        <button id="logoutButton">Logout</button>
+                    </div>
+                </div>
             </div>
-        </div>
-            </nav>
+        </nav>
     </header>
 
     <div class="sidebar-container" id="sidebar-container">
@@ -43,6 +734,20 @@
                 <li><a href="homepage.html">Home</a></li>
                 <li><a href="modulehomepage.html">Modules</a></li>
                 <li><a href="#final-assessment">Final Assessment</a></li>
+                <!-- Sidebar Login/Logout/Profile items (managed by JS) -->
+                <li id="sidebarLoginListItem" class="sidebar-list-item">
+                    <a href="login.html" id="sidebarLoginLink" class="sidebar-nav-link">Login</a>
+                </li>
+                <li id="sidebarUserAvatarListItem" class="sidebar-list-item sidebar-user-info hidden">
+                    <img id="sidebarUserAvatarImg" class="sidebar-user-avatar-img" src="https://placehold.co/40x40/4CAF50/FFFFFF?text=U" alt="User Avatar">
+                    <span id="sidebarUserName">User Name</span>
+                </li>
+                <li id="sidebarProfileLinkDropdown" class="sidebar-list-item hidden">
+                    <a href="profile.html" class="sidebar-nav-link">Profile</a>
+                </li>
+                <li id="sidebarLogoutListItem" class="sidebar-list-item hidden">
+                    <button id="sidebarLogoutButton" class="sidebar-logout-button">Logout</button>
+                </li>
             </ul>
         </aside>
     </div>
@@ -52,13 +757,13 @@
             <div class="top-nav">
                 <div class="nav-item name-section">
                     <span>Name</span>
-                    <input type="text" placeholder="Search" class="search-input">
+                    <input type="text" id="search-input" placeholder="Search by name" class="search-input">
                 </div>
                 <div class="nav-item file-section">
-                    <span>File</span>
+                    <span>Latest File</span>
                 </div>
                 <div class="nav-item games-section">
-                    <span>Games</span>
+                    <span>Latest Game</span>
                 </div>
                 <div class="nav-item action-section">
                     <span>Action</span>
@@ -67,86 +772,10 @@
 
             <div class="user-list-wrapper">
                 <div class="user-list" id="user-list">
-                    <div class="user-entry" data-user-id="101">
-                        <div class="user-info">
-                            <span class="status-indicator online"></span>
-                            <a href="profile1.html" class="user-name-link"><span class="user-name">Nicole Fernandez</span></a>
-                        </div>
-                        <div class="user-progress">
-                            <div class="progress-item file-upload">
-                                <span class="status submitted">segregation activity</span>
-                            </div>
-                            <div class="progress-item game-played">
-                                <span class="status submitted">Waste Segregation</span>
-                            </div>
-                        </div>
-                        <div class="user-actions">
-                            <button class="delete-btn" data-user-id="101">
-                                <img src="https://placehold.co/20x20/FF0000/FFFFFF?text=X" alt="Delete">
-                            </button>
-                        </div>
-                    </div>
-                    <div class="user-entry" data-user-id="102">
-                        <div class="user-info">
-                            <span class="status-indicator online"></span>
-                            <span class="user-name">John Doe</span>
-                        </div>
-                        <div class="user-progress">
-                            <div class="progress-item file-upload">
-                                <span class="status submitted">Module 1 Quiz</span>
-                            </div>
-                            <div class="progress-item game-played">
-                                <span class="status submitted">Recycling Challenge</span>
-                            </div>
-                        </div>
-                        <div class="user-actions">
-                            <button class="delete-btn" data-user-id="102">
-                                <img src="https://placehold.co/20x20/FF0000/FFFFFF?text=X" alt="Delete">
-                            </button>
-                        </div>
-                    </div>
-                    <div class="user-entry" data-user-id="103">
-                        <div class="user-info">
-                            <span class="status-indicator"></span>
-                            <span class="user-name">Jane Smith</span>
-                        </div>
-                        <div class="user-progress">
-                            <div class="progress-item file-upload">
-                                <span class="status">Pending</span>
-                            </div>
-                            <div class="progress-item game-played">
-                                <span class="status">Not Played</span>
-                            </div>
-                        </div>
-                        <div class="user-actions">
-                            <button class="delete-btn" data-user-id="103">
-                                <img src="https://placehold.co/20x20/FF0000/FFFFFF?text=X" alt="Delete">
-                            </button>
-                        </div>
-                    </div>
-                    <div class="user-entry" data-user-id="104">
-                        <div class="user-info">
-                            <span class="status-indicator online"></span>
-                            <span class="user-name">Michael Brown</span>
-                        </div>
-                        <div class="user-progress">
-                            <div class="progress-item file-upload">
-                                <span class="status submitted">Module 2 Essay</span>
-                            </div>
-                            <div class="progress-item game-played">
-                                <span class="status submitted">Forest Defender</span>
-                            </div>
-                        </div>
-                        <div class="user-actions">
-                            <button class="delete-btn" data-user-id="104">
-                                <img src="https://placehold.co/20x20/FF0000/FFFFFF?text=X" alt="Delete">
-                            </button>
-                        </div>
-                    </div>
+                    <!-- User entries will be dynamically loaded here -->
+                    <p>Loading users...</p>
                 </div>
             </div>
-
-            <div class="scroll-indicator"></div>
         </div>
     </div>
 
@@ -200,347 +829,550 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <span>&copy; 2025 EcoMind</span>
+            <span>&copy; <span id="year"></span> 2025 EcoMind</span>
             <a href="#">EcoMind Policies</a>
             <a href="#">Terms of Use</a>
             <a href="aboutus.html">About us</a>
         </div>
     </footer>
 
-<script>
-    // This inline script remains in the <head> or at the top of your body
-    // to ensure Firebase config is available before the main module script runs.
-    window.__firebase_config = JSON.stringify({
-        apiKey: "AIzaSyCXhfb3vyz3uWd-4p3t4UudLPzT-PD9JtE",
-        authDomain: "ecomind-164ad.firebaseapp.com",
-        projectId: "ecomind-164ad",
-        storageBucket: "ecomind-164ad.firebasestorage.app",
-        messagingSenderId: "342215046607",
-        appId: "1:342215046607:web:3b7465bc2a846acb000eba"
-    });
-    window.__app_id = "1:342215046607:web:3b7465bc2a846acb000eba";
-</script>
-        <script type="module">
-    // Firebase Imports
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <script>
+        // IMPORTANT: These variables are provided by the Canvas environment at runtime.
+        // DO NOT change these lines. They ensure your app connects to the correct Firebase project.
+        window.__firebase_config = JSON.stringify({
+            apiKey: "AIzaSyCXhfb3vyz3uWd-4p3t4UudLPzT-PD9JtE",
+            authDomain: "ecomind-164ad.firebaseapp.com",
+            projectId: "ecomind-164ad",
+            storageBucket: "ecomind-164ad.firebasestorage.app",
+            messagingSenderId: "342215046607",
+            appId: "1:342215046607:web:3b7465bc2a846acb000eba"
+        });
+        window.__app_id = "1:342215046607:web:3b7465bc2a846acb000eba";
+    </script>
+    <script type="module">
+        // Firebase Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    // Global Firebase variables
-    let app;
-    let auth;
-    let db;
-    let currentUserId = null;
-    let isAuthReady = false; // Flag to indicate if Firebase auth state has been initially checked
-
-    // --- Firebase Initialization & Authentication State Management ---
-    try {
-        let firebaseConfig = {};
+        // Global Firebase variables
+        let app;
+        let auth;
+        let db;
+        let currentUserId = null;
+        let isAuthReady = false; // Flag to indicate if Firebase auth state has been initially checked
         let appId = 'default-app-id'; // Fallback, primarily overridden by window.__app_id
 
-        if (typeof window.__firebase_config !== 'undefined' && window.__firebase_config) {
+        // --- Modal Functions ---
+        // This modal is specifically for delete confirmation, not general messages.
+        // So, no 'OK' button, just 'Yes'/'No'.
+        // We'll use a separate, simpler showModal for general messages if needed.
+        window.showGeneralModal = function(message) {
+            const modal = document.getElementById('generalMessageModal'); // Assuming a general message modal exists or is added
+            const modalMessage = document.getElementById('generalModalMessage');
+            if (modalMessage) modalMessage.textContent = message;
+            if (modal) {
+                modal.style.display = 'flex';
+            } else {
+                console.warn("General message modal not found. Falling back to alert.");
+                alert(message); // Fallback if no general modal is provided
+            }
+        };
+
+        window.closeGeneralModal = function() {
+            const modal = document.getElementById('generalMessageModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // --- Firebase Initialization & Authentication State Management ---
+        async function initializeFirebase() {
             try {
-                firebaseConfig = JSON.parse(window.__firebase_config);
-                console.log("Parsed firebaseConfig from global window.");
-            } catch (parseError) {
-                console.error("Error parsing __firebase_config:", parseError);
-                window.showModal("Firebase configuration parsing error. Please check the Canvas environment settings.");
-                throw new Error("Firebase config parsing failed.");
-            }
-        } else {
-            console.warn("__firebase_config is undefined or empty. Firebase will not be initialized with proper config.");
-            window.showModal("Firebase configuration is missing. Please ensure your Canvas environment provides it.");
-            throw new Error("Firebase config missing.");
-        }
+                let firebaseConfig = {};
 
-        if (typeof window.__app_id !== 'undefined' && window.__app_id) {
-            appId = window.__app_id;
-            console.log("App ID from global window:", appId);
-        } else {
-            console.warn("__app_id is undefined or empty. Using default-app-id.");
-        }
-
-       if (Object.keys(firebaseConfig).length > 0) {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            console.log("Firebase initialized successfully. App, Auth, and DB instances created.");
-
-            // Listen for authentication state changes
-            onAuthStateChanged(auth, async (user) => {
-                console.log("Auth state changed. User:", user ? user.uid : "null");
-
-                // Get references to all relevant UI elements for TOP NAV
-                const loginLink = document.getElementById('loginLink');
-                const userAvatarContainer = document.getElementById('userAvatarContainer');
-                const userAvatarImg = document.getElementById('userAvatarImg');
-                const userDropdownMenu = document.getElementById('userDropdownMenu');
-                const logoutButton = document.getElementById('logoutButton');
-                const profileLinkDropdown = document.getElementById('profileLinkDropdown');
-
-                // Get references to all relevant UI elements for SIDEBAR
-                const sidebarLoginListItem = document.getElementById('sidebarLoginListItem');
-                const sidebarUserAvatarListItem = document.getElementById('sidebarUserAvatarListItem');
-                const sidebarUserAvatarImg = document.getElementById('sidebarUserAvatarImg');
-                const sidebarLogoutButton = document.getElementById('sidebarLogoutButton');
-                const sidebarProfileLinkDropdown = document.getElementById('sidebarProfileLinkDropdown');
-
-                 if (user) {
-                    // User is signed in
-                    currentUserId = user.uid;
-                    const userIdDisplay = document.getElementById('userIdDisplay'); // Assuming this exists for debugging
-                    if (userIdDisplay) userIdDisplay.textContent = `User ID: ${currentUserId}`;
-
-                    // --- Top Navigation UI Update (Logged In) ---
-                    if (loginLink) loginLink.classList.add('hidden');
-                    if (userAvatarContainer) {
-                        userAvatarContainer.classList.remove('hidden');
-                        if (userAvatarImg) {
-                            userAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
-                            userAvatarImg.alt = user.displayName || 'User Avatar';
-                        }
-                        userAvatarContainer.onclick = toggleUserDropdown;
-                    }
-                    if (logoutButton) logoutButton.onclick = handleLogout;
-                    if (profileLinkDropdown) profileLinkDropdown.href = `profile.html?uid=${user.uid}`;
-
-                    // --- Sidebar Navigation UI Update (Logged In) ---
-                    if (sidebarLoginListItem) sidebarLoginListItem.classList.add('hidden');
-                    if (sidebarUserAvatarListItem) {
-                        sidebarUserAvatarListItem.classList.remove('hidden');
-                        if (sidebarUserAvatarImg) {
-                            sidebarUserAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
-                            sidebarUserAvatarImg.alt = user.displayName || 'User Avatar';
-                        }
-                    }
-                    if (sidebarLogoutButton) sidebarLogoutButton.onclick = handleLogout;
-                    if (sidebarProfileLinkDropdown) sidebarProfileLinkDropdown.href = `profile.html?uid=${user.uid}`;
-
-                    // --- Firestore User Profile Management ---
-                    const userProfileRef = doc(db, `artifacts/${appId}/users/${currentUserId}/user_profiles`, currentUserId);
+                if (typeof window.__firebase_config !== 'undefined' && window.__firebase_config) {
                     try {
-                        const userProfileSnap = await getDoc(userProfileRef);
-                        if (!userProfileSnap.exists()) {
-                            await setDoc(userProfileRef, {
-                                email: user.email || null,
-                                displayName: user.displayName || null,
-                                photoURL: user.photoURL || null,
-                                role: user.isAnonymous ? 'anonymous' : 'standard',
-                                registrationDate: new Date().toISOString(),
-                            }, { merge: true });
-                            console.log("Created new user profile for:", currentUserId);
-                        }
-                        await setDoc(userProfileRef, {
-                            lastLogin: new Date().toISOString()
-                        }, { merge: true });
-                        console.log("Last login updated for user:", currentUserId);
-                    } catch (error) {
-                        console.error("Error ensuring/updating user profile in Firestore:", error);
-                        window.showModal('Error updating user profile: ' + error.message);
+                        firebaseConfig = JSON.parse(window.__firebase_config);
+                        console.log("Parsed firebaseConfig from global window.");
+                    } catch (parseError) {
+                        console.error("Error parsing __firebase_config:", parseError);
+                        window.showGeneralModal("Firebase configuration parsing error. Please check the Canvas environment settings.");
+                        throw new Error("Firebase config parsing failed.");
                     }
-
                 } else {
-                    // User is signed out
-                    currentUserId = null;
-                    const userIdDisplay = document.getElementById('userIdDisplay');
-                    if (userIdDisplay) userIdDisplay.textContent = 'Not logged in';
-
-                    // --- Top Navigation UI Update (Logged Out) ---
-                    if (loginLink) {
-                        loginLink.classList.remove('hidden');
-                        loginLink.textContent = 'Login';
-                        loginLink.href = 'login.html';
-                        loginLink.onclick = null;
-                    }
-                    if (userAvatarContainer) userAvatarContainer.classList.add('hidden');
-                    if (userDropdownMenu) userDropdownMenu.classList.remove('show');
-
-                    // --- Sidebar Navigation UI Update (Logged Out) ---
-                    if (sidebarLoginListItem) {
-                        sidebarLoginListItem.classList.remove('hidden');
-                        const sidebarLoginLink = document.getElementById('sidebarLoginLink');
-                        if (sidebarLoginLink) {
-                            sidebarLoginLink.textContent = 'Login';
-                            sidebarLoginLink.href = 'login.html';
-                            sidebarLoginLink.onclick = null;
-                        }
-                    }
-                    if (sidebarUserAvatarListItem) sidebarUserAvatarListItem.classList.add('hidden');
+                    console.warn("__firebase_config is undefined or empty. Firebase will not be initialized with proper config.");
+                    window.showGeneralModal("Firebase configuration is missing. Please ensure your Canvas environment provides it.");
+                    throw new Error("Firebase config missing.");
                 }
-                isAuthReady = true;
-                console.log("Firebase Auth state initial check complete (isAuthReady = true).");
-            });
-        } else {
-            console.error("Firebase config is empty after parsing. Firebase will not be initialized.");
-            const userIdDisplay = document.getElementById('userIdDisplay');
-            if (userIdDisplay) userIdDisplay.textContent = 'Firebase not initialized (config empty)';
-            window.showModal("Firebase configuration is empty. Please ensure your Canvas environment provides a valid config.");
-        }
-    } catch (e) {
-        console.error("Critical error during Firebase setup:", e);
-        window.showModal('A critical error occurred during Firebase setup: ' + e.message + '. Check console for details.');
-        const userIdDisplay = document.getElementById('userIdDisplay');
-        if (userIdDisplay) userIdDisplay.textContent = 'Firebase critical error';
-    }
 
-    // --- Logout Function ---
-    async function handleLogout(e) {
-        e.preventDefault();
-        console.log("Logout button clicked.");
+                if (typeof window.__app_id !== 'undefined' && window.__app_id) {
+                    appId = window.__app_id;
+                    console.log("App ID from global window:", appId);
+                } else {
+                    console.warn("__app_id is undefined or empty. Using default-app-id.");
+                }
 
-        if (!auth) {
-            window.showModal('Firebase Auth is not initialized. Cannot log out.');
-            return;
-        }
-        try {
-            await signOut(auth);
-            localStorage.removeItem('token');
-            window.showModal('You have been logged out.', () => {
-                window.location.href = 'login.html';
-            });
-        } catch (error) {
-            console.error("Error during logout:", error);
-            window.showModal('Logout failed: ' + error.message);
-        }
-    }
+                if (Object.keys(firebaseConfig).length > 0) {
+                    app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    console.log("Firebase initialized successfully. App, Auth, and DB instances created.");
 
-    // --- User Avatar Dropdown Toggle (for Top Nav) ---
-    function toggleUserDropdown() {
-        const userDropdownMenu = document.getElementById('userDropdownMenu');
-        if (userDropdownMenu) {
-            userDropdownMenu.classList.toggle('show');
-        }
-    }
+                    // Listen for authentication state changes
+                    onAuthStateChanged(auth, async (user) => {
+                        console.log("Auth state changed. User:", user ? user.uid : "null");
 
-    // --- Close dropdown if clicked outside ---
-    document.addEventListener('click', (event) => {
-        const userAvatarContainer = document.getElementById('userAvatarContainer');
-        const userDropdownMenu = document.getElementById('userDropdownMenu');
-        if (userAvatarContainer && userDropdownMenu && !userAvatarContainer.contains(event.target) && !userDropdownMenu.contains(event.target)) {
-            userDropdownMenu.classList.remove('show');
-        }
-    });
-        console.log("DOMContentLoaded event fired.");
+                        // Get references to all relevant UI elements for TOP NAV
+                        const loginLink = document.getElementById('loginLink');
+                        const userAvatarContainer = document.getElementById('userAvatarContainer');
+                        const userAvatarImg = document.getElementById('userAvatarImg');
+                        const userDropdownMenu = document.getElementById('userDropdownMenu');
+                        const logoutButton = document.getElementById('logoutButton');
+                        const profileLinkDropdown = document.getElementById('profileLinkDropdown');
 
-        // Set the current year in the footer
-        const yearSpan = document.getElementById('year');
-        if (yearSpan) {
-            yearSpan.textContent = new Date().getFullYear();
-        }
-    document.addEventListener('DOMContentLoaded', () => {
-    const hamburgerIcon = document.getElementById('hamburger-icon');
-    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
-    const sidebarContainer = document.getElementById('sidebar-container');
-    const sidebarMenu = document.getElementById('sidebar-menu');
+                        // Get references to all relevant UI elements for SIDEBAR
+                        const sidebarLoginListItem = document.getElementById('sidebarLoginListItem');
+                        const sidebarUserAvatarListItem = document.getElementById('sidebarUserAvatarListItem');
+                        const sidebarUserAvatarImg = document.getElementById('sidebarUserAvatarImg');
+                        const sidebarUserName = document.getElementById('sidebarUserName');
+                        const sidebarLogoutListItem = document.getElementById('sidebarLogoutListItem');
+                        const sidebarLogoutButton = document.getElementById('sidebarLogoutButton');
+                        const sidebarProfileLinkDropdown = document.getElementById('sidebarProfileLinkDropdown');
 
-    // Open sidebar
-    hamburgerIcon.addEventListener('click', () => {
-        sidebarContainer.classList.add('open');
-        sidebarMenu.classList.add('open');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling body when sidebar is open
-    });
+                        if (user) {
+                            // User is signed in
+                            currentUserId = user.uid;
+                            // The userIdDisplay element is not in this HTML, so remove its usage
+                            // const userIdDisplay = document.getElementById('userIdDisplay');
+                            // if (userIdDisplay) userIdDisplay.textContent = `User ID: ${currentUserId}`;
 
-    // Close sidebar by clicking close button
-    closeSidebarBtn.addEventListener('click', () => {
-        sidebarContainer.classList.remove('open');
-        sidebarMenu.classList.remove('open');
-        document.body.style.overflow = ''; // Allow body scrolling again
-    });
+                            // --- Top Navigation UI Update (Logged In) ---
+                            if (loginLink) loginLink.classList.add('hidden');
+                            if (userAvatarContainer) {
+                                userAvatarContainer.classList.remove('hidden');
+                                if (userAvatarImg) {
+                                    userAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
+                                    userAvatarImg.alt = user.displayName || 'User Avatar';
+                                }
+                                userAvatarContainer.onclick = toggleUserDropdown;
+                            }
+                            if (logoutButton) logoutButton.onclick = handleLogout;
+                            if (profileLinkDropdown) profileLinkDropdown.href = `profile.html?uid=${user.uid}`;
 
-    // Close sidebar by clicking outside the menu (on the overlay)
-    sidebarContainer.addEventListener('click', (event) => {
-        // Check if the click occurred directly on the container and not on the sidebar menu itself
-        if (event.target === sidebarContainer) {
-            sidebarContainer.classList.remove('open');
-            sidebarMenu.classList.remove('open');
-            document.body.style.overflow = ''; // Allow body scrolling again
-        }
-    });
+                            // --- Sidebar Navigation UI Update (Logged In) ---
+                            if (sidebarLoginListItem) sidebarLoginListItem.classList.add('hidden');
+                            if (sidebarUserAvatarListItem) {
+                                sidebarUserAvatarListItem.classList.remove('hidden');
+                                if (sidebarUserAvatarImg) {
+                                    sidebarUserAvatarImg.src = user.photoURL || `https://placehold.co/40x40/4CAF50/FFFFFF?text=${user.email ? user.email.charAt(0).toUpperCase() : 'U'}`;
+                                    sidebarUserAvatarImg.alt = user.displayName || 'User Avatar';
+                                }
+                                if (sidebarUserName) sidebarUserName.textContent = user.displayName || user.email || 'User';
+                            }
+                            if (sidebarLogoutListItem) sidebarLogoutListItem.classList.remove('hidden');
+                            if (sidebarLogoutButton) sidebarLogoutButton.onclick = handleLogout;
+                            if (sidebarProfileLinkDropdown) {
+                                sidebarProfileLinkDropdown.classList.remove('hidden');
+                                sidebarProfileLinkDropdown.querySelector('a').href = `profile.html?uid=${user.uid}`;
+                            }
 
-    // Optional: Close sidebar when a link inside is clicked
-    const sidebarLinks = document.querySelectorAll('.sidebar-links a');
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            sidebarContainer.classList.remove('open');
-            sidebarMenu.classList.remove('open');
-            document.body.style.overflow = ''; // Allow body scrolling again
-        });
-    });
+                            // --- Firestore User Profile Management (for current user) ---
+                            // Ensure the current admin user's profile exists and update last login time
+                            const userProfileRef = doc(db, `artifacts/${appId}/users/${currentUserId}/user_profiles`, currentUserId);
+                            try {
+                                const userProfileSnap = await getDoc(userProfileRef);
+                                if (!userProfileSnap.exists()) {
+                                    await setDoc(userProfileRef, {
+                                        email: user.email || null,
+                                        displayName: user.displayName || null,
+                                        photoURL: user.photoURL || null,
+                                        role: user.isAnonymous ? 'anonymous' : 'admin', // Assuming this page is for admin
+                                        registrationDate: new Date().toISOString(),
+                                    }, { merge: true });
+                                    console.log("Created new admin user profile for:", currentUserId);
+                                }
+                                await setDoc(userProfileRef, {
+                                    lastLogin: new Date().toISOString()
+                                }, { merge: true });
+                                console.log("Last login updated for admin user:", currentUserId);
 
-    // --- Delete Confirmation Modal Logic ---
-    const deleteModal = document.getElementById('deleteConfirmationModal');
-    const confirmDeleteYes = document.getElementById('confirmDeleteYes');
-    const confirmDeleteNo = document.getElementById('confirmDeleteNo');
-    const userList = document.getElementById('user-list');
-    let userToDeleteId = null; // To store the ID of the user to be deleted
+                                // Load all users and their activities for the report
+                                loadUsersAndActivities();
 
-    // Event delegation for delete buttons
-    userList.addEventListener('click', (event) => {
-        const deleteBtn = event.target.closest('.delete-btn');
-        if (deleteBtn) {
-            userToDeleteId = deleteBtn.dataset.userId; // Get the user ID from the button's data attribute
-            deleteModal.style.display = 'flex'; // Show the modal
-            document.body.style.overflow = 'hidden'; // Prevent scrolling body when modal is open
-        }
-    });
+                            } catch (error) {
+                                console.error("Error ensuring/updating admin user profile in Firestore:", error);
+                                window.showGeneralModal('Error updating admin profile: ' + error.message);
+                            }
 
-    // Handle 'Yes' click for deletion
-    confirmDeleteYes.addEventListener('click', () => {
-        if (userToDeleteId) {
-            const userEntry = document.querySelector(`.user-entry[data-user-id="${userToDeleteId}"]`);
-            if (userEntry) {
-                userEntry.remove(); // Remove the user entry from the DOM
-                // In a real application, you would send a request to your backend to delete the user data here.
-                console.log(`User with ID ${userToDeleteId} has been deleted.`);
+                        } else {
+                            // User is signed out
+                            currentUserId = null;
+                            // const userIdDisplay = document.getElementById('userIdDisplay');
+                            // if (userIdDisplay) userIdDisplay.textContent = 'Not logged in';
+
+                            // --- Top Navigation UI Update (Logged Out) ---
+                            if (loginLink) {
+                                loginLink.classList.remove('hidden');
+                                loginLink.textContent = 'Login';
+                                loginLink.href = 'login.html';
+                                loginLink.onclick = null;
+                            }
+                            if (userAvatarContainer) userAvatarContainer.classList.add('hidden');
+                            if (userDropdownMenu) userDropdownMenu.classList.remove('show');
+
+                            // --- Sidebar Navigation UI Update (Logged Out) ---
+                            if (sidebarLoginListItem) {
+                                sidebarLoginListItem.classList.remove('hidden');
+                                const sidebarLoginLink = document.getElementById('sidebarLoginLink');
+                                if (sidebarLoginLink) {
+                                    sidebarLoginLink.textContent = 'Login';
+                                    sidebarLoginLink.href = 'login.html';
+                                    sidebarLoginLink.onclick = null;
+                                }
+                            }
+                            if (sidebarUserAvatarListItem) sidebarUserAvatarListItem.classList.add('hidden');
+                            if (sidebarLogoutListItem) sidebarLogoutListItem.classList.add('hidden');
+                            if (sidebarProfileLinkDropdown) sidebarProfileLinkDropdown.classList.add('hidden');
+
+                            // Clear user list if not logged in
+                            const userListDiv = document.getElementById('user-list');
+                            if (userListDiv) {
+                                userListDiv.innerHTML = '<p>Please log in as an administrator to view user progress.</p>';
+                            }
+
+                            // Redirect to login if not authenticated and on admin page
+                            if (window.location.pathname.includes('statusbar.html') && isAuthReady) {
+                                window.showGeneralModal('You need to be logged in as an administrator to view this page.', () => {
+                                    window.location.href = 'login.html';
+                                });
+                            }
+                        }
+                        isAuthReady = true;
+                        console.log("Firebase Auth state initial check complete (isAuthReady = true).");
+                    });
+                } else {
+                    console.error("Firebase config is empty after parsing. Firebase will not be initialized.");
+                    // const userIdDisplay = document.getElementById('userIdDisplay');
+                    // if (userIdDisplay) userIdDisplay.textContent = 'Firebase not initialized (config empty)';
+                    window.showGeneralModal("Firebase configuration is empty. Please ensure your Canvas environment provides a valid config.");
+                }
+            } catch (e) {
+                console.error("Critical error during Firebase setup:", e);
+                window.showGeneralModal('A critical error occurred during Firebase setup: ' + e.message + '. Check console for details.');
+                // const userIdDisplay = document.getElementById('userIdDisplay');
+                // if (userIdDisplay) userIdDisplay.textContent = 'Firebase critical error';
             }
         }
-        userToDeleteId = null; // Reset
-        deleteModal.style.display = 'none'; // Hide the modal
-        document.body.style.overflow = ''; // Allow body scrolling again
-    });
 
-    // Handle 'No' click for deletion
-    confirmDeleteNo.addEventListener('click', () => {
-        userToDeleteId = null; // Reset
-        deleteModal.style.display = 'none'; // Hide the modal
-        document.body.style.overflow = ''; // Allow body scrolling again
-    });
+        /**
+         * Fetches all user profiles and their latest activities from Firestore
+         * and displays them in the user list.
+         */
+        async function loadUsersAndActivities() {
+            if (!db || !appId) {
+                console.warn("Firestore or appId not available for loading users.");
+                const userListDiv = document.getElementById('user-list');
+                if (userListDiv) userListDiv.innerHTML = '<p>Failed to load users: Firebase not ready.</p>';
+                return;
+            }
 
-    // Close modal if clicked outside (on the overlay)
-    deleteModal.addEventListener('click', (event) => {
-        if (event.target === deleteModal) {
+            const userListDiv = document.getElementById('user-list');
+            if (userListDiv) userListDiv.innerHTML = '<p>Loading users...</p>'; // Show loading state
+
+            try {
+                // Fetch all user profiles
+                const userProfilesCollectionRef = collection(db, `artifacts/${appId}/users`);
+                const userProfilesSnapshot = await getDocs(userProfilesCollectionRef);
+
+                const usersData = [];
+                for (const userDoc of userProfilesSnapshot.docs) {
+                    const userId = userDoc.id;
+                    const userProfileRef = doc(db, `artifacts/${appId}/users/${userId}/user_profiles`, userId);
+                    const userProfileSnap = await getDoc(userProfileRef);
+
+                    if (userProfileSnap.exists()) {
+                        const userData = userProfileSnap.data();
+                        
+                        // Fetch latest file submission
+                        const filesQuery = query(
+                            collection(db, `artifacts/${appId}/users/${userId}/activities`),
+                            where('type', '==', 'file_submission')
+                            // orderBy('timestamp', 'desc') // Removed orderBy as per instruction, will sort client-side
+                        );
+                        const filesSnapshot = await getDocs(filesQuery);
+                        let latestFile = null;
+                        if (!filesSnapshot.empty) {
+                            // Sort client-side if orderBy is not used in query
+                            const sortedFiles = filesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+                                .sort((a, b) => (b.timestamp?.toMillis() || 0) - (a.timestamp?.toMillis() || 0));
+                            latestFile = sortedFiles[0];
+                        }
+
+                        // Fetch latest game play
+                        const gamesQuery = query(
+                            collection(db, `artifacts/${appId}/users/${userId}/activities`),
+                            where('type', '==', 'game_play')
+                            // orderBy('timestamp', 'desc') // Removed orderBy as per instruction, will sort client-side
+                        );
+                        const gamesSnapshot = await getDocs(gamesQuery);
+                        let latestGame = null;
+                        if (!gamesSnapshot.empty) {
+                            // Sort client-side if orderBy is not used in query
+                            const sortedGames = gamesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+                                .sort((a, b) => (b.timestamp?.toMillis() || 0) - (a.timestamp?.toMillis() || 0));
+                            latestGame = sortedGames[0];
+                        }
+
+                        usersData.push({
+                            id: userId,
+                            displayName: userData.displayName || userData.email || 'Unknown User',
+                            latestFile: latestFile ? latestFile.activityName : null,
+                            latestGame: latestGame ? latestGame.activityName : null,
+                            isOnline: (new Date().getTime() - (new Date(userData.lastLogin).getTime() || 0)) < (5 * 60 * 1000) // Online if last login within 5 mins
+                        });
+                    }
+                }
+                displayUsers(usersData);
+            } catch (error) {
+                console.error("Error loading users and activities:", error);
+                if (userListDiv) userListDiv.innerHTML = '<p>Error loading user data.</p>';
+                window.showGeneralModal('Error loading user data: ' + error.message);
+            }
+        }
+
+        /**
+         * Renders the list of users in the UI.
+         * @param {Array<Object>} users - Array of user objects with displayName, latestFile, latestGame, isOnline.
+         */
+        function displayUsers(users) {
+            const userListDiv = document.getElementById('user-list');
+            if (!userListDiv) return;
+
+            userListDiv.innerHTML = ''; // Clear existing entries
+
+            if (users.length === 0) {
+                userListDiv.innerHTML = '<p>No users found.</p>';
+                return;
+            }
+
+            users.forEach(user => {
+                const userEntry = document.createElement('div');
+                userEntry.classList.add('user-entry');
+                userEntry.dataset.userId = user.id;
+                userEntry.dataset.userName = user.displayName.toLowerCase(); // For search
+
+                const statusClass = user.isOnline ? 'online' : '';
+
+                userEntry.innerHTML = `
+                    <div class="user-info">
+                        <span class="status-indicator ${statusClass}"></span>
+                        <a href="profile.html?uid=${user.id}" class="user-name-link"><span class="user-name">${user.displayName}</span></a>
+                    </div>
+                    <div class="user-progress">
+                        <div class="progress-item file-upload">
+                            <span class="status ${user.latestFile ? 'submitted' : 'not-submitted'}">${user.latestFile || 'No file submitted'}</span>
+                        </div>
+                    </div>
+                    <div class="user-progress">
+                        <div class="progress-item game-played">
+                            <span class="status ${user.latestGame ? 'submitted' : 'not-played'}">${user.latestGame || 'No game played'}</span>
+                        </div>
+                    </div>
+                    <div class="user-actions">
+                        <button class="delete-btn" data-user-id="${user.id}">
+                            <img src="https://placehold.co/20x20/FF0000/FFFFFF?text=X" alt="Delete">
+                        </button>
+                    </div>
+                `;
+                userListDiv.appendChild(userEntry);
+            });
+        }
+
+        // --- Delete Confirmation Modal Logic ---
+        const deleteModal = document.getElementById('deleteConfirmationModal');
+        const confirmDeleteYes = document.getElementById('confirmDeleteYes');
+        const confirmDeleteNo = document.getElementById('confirmDeleteNo');
+        const userList = document.getElementById('user-list');
+        let userToDeleteId = null; // To store the ID of the user to be deleted
+
+        // Event delegation for delete buttons
+        userList.addEventListener('click', (event) => {
+            const deleteBtn = event.target.closest('.delete-btn');
+            if (deleteBtn) {
+                userToDeleteId = deleteBtn.dataset.userId; // Get the user ID from the button's data attribute
+                deleteModal.style.display = 'flex'; // Show the modal
+                document.body.style.overflow = 'hidden'; // Prevent scrolling body when modal is open
+            }
+        });
+
+        // Handle 'Yes' click for deletion
+        confirmDeleteYes.addEventListener('click', async () => {
+            if (userToDeleteId && db && appId) {
+                try {
+                    // Delete user profile document
+                    const userProfileRef = doc(db, `artifacts/${appId}/users/${userToDeleteId}/user_profiles`, userToDeleteId);
+                    await deleteDoc(userProfileRef);
+                    console.log(`User profile with ID ${userToDeleteId} deleted from Firestore.`);
+
+                    // Note: Deleting subcollections (like 'activities') from client-side is complex
+                    // and usually handled by a Cloud Function for recursive deletion.
+                    // For this example, we'll just log that activities should also be considered.
+                    console.warn(`Activities for user ${userToDeleteId} might still exist in Firestore. Consider implementing a Cloud Function for full recursive deletion.`);
+
+                    // Remove the user entry from the DOM
+                    const userEntry = document.querySelector(`.user-entry[data-user-id="${userToDeleteId}"]`);
+                    if (userEntry) {
+                        userEntry.remove();
+                        console.log(`User entry with ID ${userToDeleteId} removed from DOM.`);
+                    }
+                    window.showGeneralModal(`User ${userToDeleteId} has been deleted.`);
+                } catch (error) {
+                    console.error("Error deleting user:", error);
+                    window.showGeneralModal('Failed to delete user: ' + error.message);
+                }
+            }
             userToDeleteId = null; // Reset
             deleteModal.style.display = 'none'; // Hide the modal
             document.body.style.overflow = ''; // Allow body scrolling again
-        }
-    });
+        });
 
-    // Update header links to point to actual HTML files and set active class
-    const currentPath = window.location.pathname.split('/').pop();
+        // Handle 'No' click for deletion
+        confirmDeleteNo.addEventListener('click', () => {
+            userToDeleteId = null; // Reset
+            deleteModal.style.display = 'none'; // Hide the modal
+            document.body.style.overflow = ''; // Allow body scrolling again
+        });
 
-    document.querySelectorAll('.top-nav-links a, .sidebar-links a').forEach(link => {
-        const linkHref = link.getAttribute('href');
+        // Close modal if clicked outside (on the overlay)
+        deleteModal.addEventListener('click', (event) => {
+            if (event.target === deleteModal) {
+                userToDeleteId = null; // Reset
+                deleteModal.style.display = 'none'; // Hide the modal
+                document.body.style.overflow = ''; // Allow body scrolling again
+            }
+        });
 
-        // Check if the link's href matches the current file name
-        if (linkHref === currentPath) {
-            link.classList.add('active');
-        }
-        // Special handling for homepage.html - assume it's the default when path is empty or homepage.html
-        else if (linkHref === "homepage.html" && (currentPath === "" || currentPath === "index.html")) { // Added index.html as common default
-            link.classList.add('active');
-        }
-        else {
-            link.classList.remove('active');
+        // --- Search Functionality ---
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.addEventListener('input', (event) => {
+                const searchTerm = event.target.value.toLowerCase();
+                const userEntries = document.querySelectorAll('.user-list .user-entry');
+                userEntries.forEach(entry => {
+                    const userName = entry.dataset.userName;
+                    if (userName.includes(searchTerm)) {
+                        entry.style.display = 'grid'; // Show the entry
+                    } else {
+                        entry.style.display = 'none'; // Hide the entry
+                    }
+                });
+            });
         }
 
-        // If the current page is 'progress_report.html' and it's not a direct link in the nav,
-        // ensure no other generic links (like home, modules, game) are active for this page.
-        // This prevents 'Home' from being active if you land directly on progress_report.html
-        if (currentPath === 'progress_report.html' && link.getAttribute('href') !== 'progress_report.html') {
-            link.classList.remove('active');
+        // --- Logout Function (from header/sidebar) ---
+        async function handleLogout(e) {
+            e.preventDefault();
+            console.log("Logout button clicked.");
+
+            if (!auth) {
+                window.showGeneralModal('Firebase Auth is not initialized. Cannot log out.');
+                return;
+            }
+            try {
+                await signOut(auth);
+                // Clear session storage related to login status
+                sessionStorage.removeItem('isLoggedIn');
+                sessionStorage.removeItem('userEmail');
+                sessionStorage.removeItem('userType');
+                window.location.href = 'login.html'; // Redirect to login page
+            } catch (error) {
+                console.error("Error during logout:", error);
+                window.showGeneralModal('Logout failed: ' + error.message);
+            }
         }
-    });
-});
-</script>
+
+        // --- User Avatar Dropdown Toggle (for Top Nav) ---
+        function toggleUserDropdown() {
+            const userDropdownMenu = document.getElementById('userDropdownMenu');
+            if (userDropdownMenu) {
+                userDropdownMenu.classList.toggle('show');
+            }
+        }
+
+        // --- Close dropdown if clicked outside ---
+        document.addEventListener('click', (event) => {
+            const userAvatarContainer = document.getElementById('userAvatarContainer');
+            const userDropdownMenu = document.getElementById('userDropdownMenu');
+            if (userAvatarContainer && userDropdownMenu && !userAvatarContainer.contains(event.target) && !userDropdownMenu.contains(event.target)) {
+                userDropdownMenu.classList.remove('show');
+            }
+        });
+
+        // --- Initial DOMContentLoaded checks and event listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOMContentLoaded event fired for statusbar.html.");
+
+            const yearSpan = document.getElementById('year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
+
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const sidebarContainer = document.getElementById('sidebar-container');
+            const sidebarMenu = document.getElementById('sidebar-menu');
+
+            if (hamburgerIcon) {
+                hamburgerIcon.addEventListener('click', () => {
+                    sidebarContainer.classList.add('open');
+                    sidebarMenu.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            if (closeSidebarBtn) {
+                closeSidebarBtn.addEventListener('click', () => {
+                    sidebarContainer.classList.remove('open');
+                    sidebarMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                });
+            }
+
+            if (sidebarContainer) {
+                sidebarContainer.addEventListener('click', (event) => {
+                    if (event.target === sidebarContainer) {
+                        sidebarContainer.classList.remove('open');
+                        sidebarMenu.classList.remove('open');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            const sidebarLinks = document.querySelectorAll('.sidebar-links a, .sidebar-links button');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (link.tagName === 'A' || (link.tagName === 'BUTTON' && link.id !== 'sidebarLogoutButton')) {
+                        sidebarContainer.classList.remove('open');
+                        sidebarMenu.classList.remove('open');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+
+            // Set active class for navigation links
+            const currentPath = window.location.pathname.split('/').pop();
+            document.querySelectorAll('.top-nav-links a, .sidebar-links a').forEach(link => {
+                const linkHref = link.getAttribute('href');
+                if (linkHref === currentPath || (linkHref === "homepage.html" && (currentPath === "" || currentPath === "index.html"))) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            initializeFirebase(); // Initialize Firebase and load data
+        });
+    </script>
 </body>
 </html>
